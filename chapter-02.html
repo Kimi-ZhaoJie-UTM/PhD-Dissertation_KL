@@ -40,7 +40,7 @@
         .panel-header {
             padding: 1.25rem;
             border-bottom: 1px solid #e2e8f0;
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
             flex-shrink: 0;
         }
         
@@ -70,10 +70,13 @@
         /* Amber theme for Chapter 02 (Core Chapter) */
         .border-t-amber { border-top-color: #d97706; }
         .bg-amber-50 { background-color: #fffbeb; }
-        .border-amber-200 { border-color: #fde68a; }
+        .border-amber-200 { border-color: #fed7aa; }
+        .border-amber-300 { border-color: #fdba74; }
         .text-amber-900 { color: #78350f; }
         .text-amber-800 { color: #92400e; }
         .text-amber-700 { color: #b45309; }
+        .bg-gradient-to-br { background-image: linear-gradient(to bottom right, var(--tw-gradient-stops)); }
+        .from-amber-50 { --tw-gradient-from: #fffbeb; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 251, 235, 0)); }
         
         /* Content Styling */
         .bilingual-item {
@@ -94,77 +97,88 @@
             margin-top: 0.15rem;
         }
         
-        /* Special cards */
-        .dimension-card {
-            background: white;
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-            border-left: 4px solid;
-            margin-bottom: 0.75rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        /* 3D Framework Entry Card Styling */
+        .framework-entry-card {
+            background: linear-gradient(135deg, #1e3a8a 0%, #312e81 50%, #1e1b4b 100%);
+            border: 2px solid #3b82f6;
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.5), 0 0 20px rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
-        .dimension-card.strategy { border-left-color: #60a5fa; }
-        .dimension-card.institution { border-left-color: #fbbf24; }
-        .dimension-card.market { border-left-color: #34d399; }
+        .framework-entry-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s;
+            opacity: 0;
+        }
+        .framework-entry-card:hover::before {
+            opacity: 1;
+            transform: rotate(45deg) translate(50%, 50%);
+        }
+        .framework-entry-card:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 20px 40px -5px rgba(59, 130, 246, 0.6), 0 0 30px rgba(59, 130, 246, 0.4);
+            border-color: #60a5fa;
+        }
+        .framework-icon {
+            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
         
-        .dimension-title {
-            font-weight: 700;
-            color: #1e293b;
-            font-size: 0.75rem;
-            margin-bottom: 0.25rem;
+        /* Nested Modal (Level 3) Styling */
+        #nestedModalOverlay {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
-        .dimension-en {
-            font-size: 0.7rem;
-            color: #64748b;
-            line-height: 1.3;
+        #nestedModalOverlay .modal-container {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            border: 2px solid #3b82f6;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(59, 130, 246, 0.3);
         }
-        .dimension-cn {
-            font-size: 0.65rem;
-            color: #94a3b8;
-            font-family: 'Noto Serif SC', serif;
-            margin-top: 0.1rem;
+        #nestedModalOverlay iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #0a0e27;
+        }
+        .pulse-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid rgba(59, 130, 246, 0.5);
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 1; }
+            100% { transform: scale(1.3); opacity: 0; }
         }
         
-        /* Gap cards */
+        /* Gap Cards */
         .gap-card {
-            background: white;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #e2e8f0;
             border-radius: 0.5rem;
             padding: 0.75rem;
-            border-left: 4px solid;
             margin-bottom: 0.5rem;
+            border-left: 3px solid;
         }
-        .gap-card.red { background: #fef2f2; border-color: #ef4444; }
-        .gap-card.orange { background: #fff7ed; border-color: #f97316; }
-        .gap-card.yellow { background: #fefce8; border-color: #eab308; }
-        .gap-card.green { background: #f0fdf4; border-color: #22c55e; }
-        .gap-card.blue { background: #eff6ff; border-color: #3b82f6; }
-        .gap-card.purple { background: #faf5ff; border-color: #a855f7; }
-        
-        .gap-title {
-            font-weight: 700;
-            font-size: 0.7rem;
-            margin-bottom: 0.25rem;
-        }
-        .gap-card.red .gap-title { color: #991b1b; }
-        .gap-card.orange .gap-title { color: #9a3412; }
-        .gap-card.yellow .gap-title { color: #854d0e; }
-        .gap-card.green .gap-title { color: #166534; }
-        .gap-card.blue .gap-title { color: #1e40af; }
-        .gap-card.purple .gap-title { color: #6b21a8; }
-        
-        /* Logic items */
-        .logic-item {
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.375rem;
-            padding: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
-        .logic-label {
-            font-weight: 600;
-            color: #475569;
-            font-size: 0.7rem;
-        }
+        .gap-card.red { border-left-color: #dc2626; background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%); }
+        .gap-card.orange { border-left-color: #ea580c; background: linear-gradient(135deg, #fff7ed 0%, #ffffff 100%); }
+        .gap-card.yellow { border-left-color: #ca8a04; background: linear-gradient(135deg, #fefce8 0%, #ffffff 100%); }
+        .gap-card.green { border-left-color: #16a34a; background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%); }
+        .gap-card.blue { border-left-color: #2563eb; background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%); }
+        .gap-card.purple { border-left-color: #9333ea; background: linear-gradient(135deg, #faf5ff 0%, #ffffff 100%); }
         
         /* Responsive Design */
         @media (max-width: 1024px) {
@@ -187,9 +201,11 @@
                 padding: 1rem;
                 gap: 1rem;
             }
+            .framework-entry-card {
+                padding: 1rem;
+            }
         }
     </style>
-<base target="_blank">
 </head>
 <body>
 
@@ -254,7 +270,7 @@
             </div>
         </div>
 
-        <!-- Center Panel: 3D Framework -->
+        <!-- Center Panel: 3D Framework (With Entry Point) -->
         <div class="panel-card border-t-4 border-t-amber">
             <div class="panel-header">
                 <h3 class="text-lg font-bold text-slate-800">3D Framework | 三维互动框架</h3>
@@ -262,51 +278,82 @@
             <div class="panel-content space-y-4">
                 <div class="bg-gradient-to-br from-amber-50 to-white border border-amber-200 rounded-lg p-3">
                     <h4 class="font-bold text-amber-900 text-xs mb-2">Framework Dimensions | 框架维度</h4>
-                    
-                    <div class="dimension-card strategy">
-                        <div class="dimension-title">Strategic Alignment Layer | 战略协同层</div>
-                        <div class="dimension-en">National policy coordination, bilateral agreements, political will, strategic positioning</div>
-                        <div class="dimension-cn">国家政策协调、双边协议、政治意愿、战略定位</div>
-                    </div>
-                    
-                    <div class="dimension-card institution">
-                        <div class="dimension-title">Institutional Coordination Layer | 制度协同层</div>
-                        <div class="dimension-en">Regulatory frameworks, Shariah governance, legal infrastructure, professional talent</div>
-                        <div class="dimension-cn">监管框架、教法治理、法律基础设施、专业人才</div>
-                    </div>
-                    
-                    <div class="dimension-card market">
-                        <div class="dimension-title">Market Integration Layer | 市场融合层</div>
-                        <div class="dimension-en">Product innovation, capital flows, institutional partnerships, investor networks</div>
-                        <div class="dimension-cn">产品创新、资本流动、机构合作、投资者网络</div>
+                    <div class="space-y-3">
+                        <div class="bg-white p-2 rounded border-l-4 border-blue-400 shadow-sm">
+                            <div class="bilingual-en font-bold text-slate-700">Strategic Alignment Layer | 战略协同层</div>
+                            <div class="bilingual-en text-xs text-slate-600">National policy coordination, bilateral agreements, political will, strategic positioning</div>
+                            <div class="bilingual-cn text-xs text-slate-500">国家政策协调、双边协议、政治意愿、战略定位</div>
+                        </div>
+                        <div class="bg-white p-2 rounded border-l-4 border-amber-400 shadow-sm">
+                            <div class="bilingual-en font-bold text-slate-700">Institutional Coordination Layer | 制度协同层</div>
+                            <div class="bilingual-en text-xs text-slate-600">Regulatory frameworks, Shariah governance, legal infrastructure, professional talent</div>
+                            <div class="bilingual-cn text-xs text-slate-500">监管框架、教法治理、法律基础设施、专业人才</div>
+                        </div>
+                        <div class="bg-white p-2 rounded border-l-4 border-green-400 shadow-sm">
+                            <div class="bilingual-en font-bold text-slate-700">Market Integration Layer | 市场融合层</div>
+                            <div class="bilingual-en text-xs text-slate-600">Product innovation, capital flows, institutional partnerships, investor networks</div>
+                            <div class="bilingual-cn text-xs text-slate-500">产品创新、资本流动、机构合作、投资者网络</div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="bg-white border border-slate-200 rounded-lg p-3">
                     <h4 class="font-bold text-slate-800 text-xs mb-2">Interaction Logics | 互动逻辑</h4>
-                    
-                    <div class="logic-item">
-                        <span class="logic-label">Top-down Empowerment | 自上而下赋能</span>
-                        <div class="bilingual-en text-xs mt-1">Strategic commitment enables institutional development and market activities</div>
-                        <div class="bilingual-cn text-xs">战略承诺推动制度发展和市场活动</div>
+                    <div class="space-y-2">
+                        <div class="bilingual-item">
+                            <span class="bilingual-en"><span class="font-medium">Top-down Empowerment:</span> Strategic commitment enables institutional development and market activities</span>
+                            <span class="bilingual-cn">自上而下赋能：战略承诺推动制度发展和市场活动</span>
+                        </div>
+                        <div class="bilingual-item">
+                            <span class="bilingual-en"><span class="font-medium">Bottom-up Feedback:</span> Market success reinforces strategic commitment and institutional investment</span>
+                            <span class="bilingual-cn">自下而上反馈：市场成功强化战略承诺和制度投资</span>
+                        </div>
+                        <div class="bilingual-item">
+                            <span class="bilingual-en"><span class="font-medium">Horizontal Spillover:</span> Developments within one dimension create lateral effects</span>
+                            <span class="bilingual-cn">横向溢出：同一维度内的发展产生横向效应</span>
+                        </div>
+                        <div class="bilingual-item">
+                            <span class="bilingual-en"><span class="font-medium">Recursive Reinforcement:</span> Cross-dimensional interactions create self-reinforcing dynamics</span>
+                            <span class="bilingual-cn">递归强化：跨维度互动创造自我强化的动态机制</span>
+                        </div>
                     </div>
+                </div>
+
+                <!-- 3D Framework Interactive Entry Point -->
+                <div class="framework-entry-card rounded-xl p-4 relative overflow-hidden group" onclick="openNestedModal('chapter-02-3d-framework.html')">
+                    <!-- Decorative background elements -->
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500 rounded-full filter blur-3xl opacity-20 -mr-10 -mt-10"></div>
+                    <div class="absolute bottom-0 left-0 w-24 h-24 bg-cyan-400 rounded-full filter blur-2xl opacity-20 -ml-5 -mb-5"></div>
                     
-                    <div class="logic-item">
-                        <span class="logic-label">Bottom-up Feedback | 自下而上反馈</span>
-                        <div class="bilingual-en text-xs mt-1">Market success reinforces strategic commitment and institutional investment</div>
-                        <div class="bilingual-cn text-xs">市场成功强化战略承诺和制度投资</div>
-                    </div>
-                    
-                    <div class="logic-item">
-                        <span class="logic-label">Horizontal Spillover | 横向溢出</span>
-                        <div class="bilingual-en text-xs mt-1">Developments within one dimension create lateral effects</div>
-                        <div class="bilingual-cn text-xs">同一维度内的发展产生横向效应</div>
-                    </div>
-                    
-                    <div class="logic-item">
-                        <span class="logic-label">Recursive Reinforcement | 递归强化</span>
-                        <div class="bilingual-en text-xs mt-1">Cross-dimensional interactions create self-reinforcing dynamics</div>
-                        <div class="bilingual-cn text-xs">跨维度互动创造自我强化的动态机制</div>
+                    <div class="flex items-start gap-4 relative z-10">
+                        <div class="framework-icon w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 relative">
+                            <div class="pulse-ring"></div>
+                            <svg class="w-8 h-8 text-white relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <h4 class="font-bold text-white text-base tracking-wide">View Interactive 3D Framework</h4>
+                                <span class="px-2 py-0.5 bg-blue-500/30 border border-blue-400/50 rounded text-[10px] text-blue-100 font-medium">L3</span>
+                            </div>
+                            <p class="text-blue-100 text-xs leading-relaxed mb-2">
+                                查看交互式三维框架可视化 | Click to explore the Strategic-Institutional-Market 3D interactive visualization with rotating globe and dynamic framework diagram.
+                            </p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2 py-1 bg-white/10 backdrop-blur rounded text-[10px] text-white border border-white/20">3D Earth</span>
+                                <span class="px-2 py-1 bg-white/10 backdrop-blur rounded text-[10px] text-white border border-white/20">Interactive SVG</span>
+                                <span class="px-2 py-1 bg-white/10 backdrop-blur rounded text-[10px] text-white border border-white/20">Bilingual</span>
+                                <span class="px-2 py-1 bg-white/10 backdrop-blur rounded text-[10px] text-white border border-white/20">159 BRI Cities</span>
+                            </div>
+                        </div>
+                        <div class="flex-shrink-0 self-center">
+                            <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/20 group-hover:bg-white/20 transition-all">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6l6 6-6 6"></path>
+                                </svg>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -327,44 +374,138 @@
             </div>
             <div class="panel-content space-y-3">
                 <div class="gap-card red">
-                    <div class="gap-title">Discursive Fragmentation | 话语割裂</div>
-                    <div class="bilingual-en text-xs">Islamic finance and BRI studies operate in parallel with limited cross-fertilization</div>
-                    <div class="bilingual-cn text-xs">伊斯兰金融与一带一路研究平行运行，缺乏交叉融合</div>
+                    <h4 class="font-bold text-red-900 text-xs mb-1">Discursive Fragmentation | 话语割裂</h4>
+                    <div class="bilingual-item">
+                        <span class="bilingual-en">Islamic finance and BRI studies operate in parallel with limited cross-fertilization</span>
+                        <span class="bilingual-cn">伊斯兰金融与一带一路研究平行运行，缺乏交叉融合</span>
+                    </div>
                 </div>
-                
                 <div class="gap-card orange">
-                    <div class="gap-title">Single-Level Analysis | 单一层次分析</div>
-                    <div class="bilingual-en text-xs">Lack of meso-level framework connecting macro-strategy, meso-institution, and micro-market</div>
-                    <div class="bilingual-cn text-xs">缺乏连接宏观战略、中观制度与微观市场的中观框架</div>
+                    <h4 class="font-bold text-orange-900 text-xs mb-1">Single-Level Analysis | 单一层次分析</h4>
+                    <div class="bilingual-item">
+                        <span class="bilingual-en">Lack of meso-level framework connecting macro-strategy, meso-institution, and micro-market</span>
+                        <span class="bilingual-cn">缺乏连接宏观战略、中观制度与微观市场的中观框架</span>
+                    </div>
                 </div>
-                
                 <div class="gap-card yellow">
-                    <div class="gap-title">Case Study Deficit | 案例聚焦不足</div>
-                    <div class="bilingual-en text-xs">Limited systematic case study on KL's pathway as specialized IFC interacting with BRI</div>
-                    <div class="bilingual-cn text-xs">缺乏将吉隆坡作为专业金融中心与一带一路互动的系统案例研究</div>
+                    <h4 class="font-bold text-yellow-900 text-xs mb-1">Case Study Deficit | 案例聚焦不足</h4>
+                    <div class="bilingual-item">
+                        <span class="bilingual-en">Limited systematic case study on KL's pathway as specialized IFC interacting with BRI</span>
+                        <span class="bilingual-cn">缺乏将吉隆坡作为专业金融中心与一带一路互动的系统案例研究</span>
+                    </div>
                 </div>
-                
                 <div class="gap-card green">
-                    <div class="gap-title">Mechanism Identification | 机制识别有限</div>
-                    <div class="bilingual-en text-xs">Describing existence of interaction rather than explaining causal mechanisms</div>
-                    <div class="bilingual-cn text-xs">描述互动的存在而非解释因果机制</div>
+                    <h4 class="font-bold text-green-900 text-xs mb-1">Mechanism Identification | 机制识别有限</h4>
+                    <div class="bilingual-item">
+                        <span class="bilingual-en">Describing existence of interaction rather than explaining causal mechanisms</span>
+                        <span class="bilingual-cn">描述互动的存在而非解释因果机制</span>
+                    </div>
                 </div>
-                
                 <div class="gap-card blue">
-                    <div class="gap-title">IFC Theory | 金融中心理论</div>
-                    <div class="bilingual-en text-xs">Specialization strategy (Poon et al., 2016), Path dependence (DiMaggio & Powell, 1983), Frontier position</div>
-                    <div class="bilingual-cn text-xs">专业化战略、路径依赖、前沿定位理论</div>
+                    <h4 class="font-bold text-blue-900 text-xs mb-1">IFC Theory | 金融中心理论</h4>
+                    <div class="bilingual-item">
+                        <span class="bilingual-en">Specialization strategy (Poon et al., 2016), Path dependence (DiMaggio & Powell, 1983), Frontier position</span>
+                        <span class="bilingual-cn">专业化战略、路径依赖、前沿定位理论</span>
+                    </div>
                 </div>
-                
                 <div class="gap-card purple">
-                    <div class="gap-title">Developmental State | 发展型国家</div>
-                    <div class="bilingual-en text-xs">State-led industrial policy approach in financial sector (Lai, 2015; Rethel, 2021)</div>
-                    <div class="bilingual-cn text-xs">金融领域国家主导的产业政策方法</div>
+                    <h4 class="font-bold text-purple-900 text-xs mb-1">Developmental State | 发展型国家</h4>
+                    <div class="bilingual-item">
+                        <span class="bilingual-en">State-led industrial policy approach in financial sector (Lai, 2015; Rethel, 2021)</span>
+                        <span class="bilingual-cn">金融领域国家主导的产业政策方法</span>
+                    </div>
                 </div>
             </div>
         </div>
 
     </div>
+
+    <!-- Level 3 Nested Modal Container (Dynamically populated) -->
+    <div id="nestedModalPlaceholder"></div>
+
+    <script>
+        // Level 3 Nested Modal Management
+        function openNestedModal(url) {
+            // Create overlay
+            const overlay = document.createElement('div');
+            overlay.id = 'nestedModalOverlay';
+            overlay.className = 'fixed inset-0 z-[100] bg-slate-900/95 flex items-center justify-center p-4 opacity-0 transition-opacity duration-300';
+            
+            // Create modal container
+            const modalContainer = document.createElement('div');
+            modalContainer.className = 'modal-container relative w-full max-w-[95vw] h-[90vh] rounded-2xl overflow-hidden transform scale-95 transition-transform duration-300';
+            
+            // Create close button
+            const closeBtn = document.createElement('button');
+            closeBtn.className = 'absolute top-4 right-4 z-[110] w-12 h-12 rounded-full bg-white/10 backdrop-blur-md text-white flex items-center justify-center hover:bg-white/20 transition-all border border-white/30 shadow-lg group';
+            closeBtn.innerHTML = `
+                <svg class="w-6 h-6 group-hover:rotate-90 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            `;
+            closeBtn.onclick = closeNestedModal;
+            
+            // Create iframe
+            const iframe = document.createElement('iframe');
+            iframe.src = url;
+            iframe.title = '3D Strategic-Institutional-Market Framework';
+            iframe.className = 'w-full h-full';
+            iframe.allow = 'fullscreen';
+            
+            // Assemble
+            modalContainer.appendChild(closeBtn);
+            modalContainer.appendChild(iframe);
+            overlay.appendChild(modalContainer);
+            document.body.appendChild(overlay);
+            
+            // Prevent background scroll
+            document.body.style.overflow = 'hidden';
+            
+            // Trigger animation
+            requestAnimationFrame(() => {
+                overlay.classList.remove('opacity-0');
+                modalContainer.classList.remove('scale-95');
+                modalContainer.classList.add('scale-100');
+            });
+            
+            // ESC key handler
+            const handleEsc = (e) => {
+                if (e.key === 'Escape') closeNestedModal();
+            };
+            document.addEventListener('keydown', handleEsc);
+            overlay.handleEsc = handleEsc;
+            
+            // Click outside to close
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) closeNestedModal();
+            });
+        }
+        
+        function closeNestedModal() {
+            const overlay = document.getElementById('nestedModalOverlay');
+            if (overlay) {
+                const container = overlay.querySelector('.modal-container');
+                overlay.classList.add('opacity-0');
+                container.classList.remove('scale-100');
+                container.classList.add('scale-95');
+                
+                setTimeout(() => {
+                    document.removeEventListener('keydown', overlay.handleEsc);
+                    overlay.remove();
+                    // Restore scroll only if no other modals open
+                    const otherModals = document.querySelectorAll('.glass-modal.active, [id$="ModalOverlay"]');
+                    if (otherModals.length === 0) {
+                        document.body.style.overflow = '';
+                    }
+                }, 300);
+            }
+        }
+        
+        // Prevent iframe scroll from propagating to parent when modal is open
+        document.addEventListener('DOMContentLoaded', () => {
+            // Any additional initialization if needed
+        });
+    </script>
 
 </body>
 </html>
