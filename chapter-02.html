@@ -3,15 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chapter 2 - Literature Review</title>
+    <title>Chapter 02 - Literature Review & Framework | 第二章 文献综述与理论框架</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            height: 100vh;
+            overflow: hidden;
         }
-        .serif-sc { font-family: 'Noto Serif SC', serif; }
+        .serif-sc {
+            font-family: 'Noto Serif SC', serif;
+        }
+        
+        /* Three Panel Layout - Critical for independent scrolling */
+        .three-panel-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.4fr 1fr;
+            gap: 1.5rem;
+            height: 100%;
+            padding: 1.5rem;
+        }
+        
         .panel-card {
             background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
             border: 1px solid #e2e8f0;
@@ -20,185 +34,336 @@
             display: flex;
             flex-direction: column;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            height: 100%;
         }
+        
         .panel-header {
             padding: 1.25rem;
             border-bottom: 1px solid #e2e8f0;
-            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            flex-shrink: 0;
         }
+        
         .panel-content {
             flex: 1;
-            padding: 1.25rem;
             overflow-y: auto;
+            padding: 1.25rem;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0,0,0,0.15) transparent;
         }
-        .bilingual-en { font-size: 0.75rem; line-height: 1.4; color: #475569; display: block; }
-        .bilingual-cn { font-size: 0.7rem; line-height: 1.4; color: #64748b; font-family: 'Noto Serif SC', serif; display: block; margin-top: 0.15rem; }
         
-        /* 谱系模态框样式 */
-        .spectrum-modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 100;
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(8px);
+        .panel-content::-webkit-scrollbar {
+            width: 6px;
         }
-        .spectrum-modal.active { display: flex; align-items: center; justify-content: center; padding: 2rem; }
-        .spectrum-content {
-            width: 95%;
-            height: 95%;
+        .panel-content::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.03);
+            border-radius: 3px;
+        }
+        .panel-content::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.15);
+            border-radius: 3px;
+        }
+        .panel-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(0,0,0,0.25);
+        }
+
+        /* Amber theme for Chapter 02 (Core Chapter) */
+        .border-t-amber { border-top-color: #d97706; }
+        .bg-amber-50 { background-color: #fffbeb; }
+        .border-amber-200 { border-color: #fde68a; }
+        .text-amber-900 { color: #78350f; }
+        .text-amber-800 { color: #92400e; }
+        .text-amber-700 { color: #b45309; }
+        
+        /* Content Styling */
+        .bilingual-item {
+            margin-bottom: 0.75rem;
+        }
+        .bilingual-en {
+            display: block;
+            font-size: 0.75rem;
+            line-height: 1.4;
+            color: #475569;
+        }
+        .bilingual-cn {
+            display: block;
+            font-size: 0.7rem;
+            line-height: 1.4;
+            color: #64748b;
+            font-family: 'Noto Serif SC', serif;
+            margin-top: 0.15rem;
+        }
+        
+        /* Special cards */
+        .dimension-card {
             background: white;
-            border-radius: 1.5rem;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid;
+            margin-bottom: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
-        .spectrum-iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
+        .dimension-card.strategy { border-left-color: #60a5fa; }
+        .dimension-card.institution { border-left-color: #fbbf24; }
+        .dimension-card.market { border-left-color: #34d399; }
+        
+        .dimension-title {
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 0.75rem;
+            margin-bottom: 0.25rem;
         }
-        .close-spectrum {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            width: 2.5rem;
-            height: 2.5rem;
-            background: rgba(0,0,0,0.5);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
+        .dimension-en {
+            font-size: 0.7rem;
+            color: #64748b;
+            line-height: 1.3;
         }
-        .close-spectrum:hover { background: rgba(0,0,0,0.7); }
+        .dimension-cn {
+            font-size: 0.65rem;
+            color: #94a3b8;
+            font-family: 'Noto Serif SC', serif;
+            margin-top: 0.1rem;
+        }
+        
+        /* Gap cards */
+        .gap-card {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            border-left: 4px solid;
+            margin-bottom: 0.5rem;
+        }
+        .gap-card.red { background: #fef2f2; border-color: #ef4444; }
+        .gap-card.orange { background: #fff7ed; border-color: #f97316; }
+        .gap-card.yellow { background: #fefce8; border-color: #eab308; }
+        .gap-card.green { background: #f0fdf4; border-color: #22c55e; }
+        .gap-card.blue { background: #eff6ff; border-color: #3b82f6; }
+        .gap-card.purple { background: #faf5ff; border-color: #a855f7; }
+        
+        .gap-title {
+            font-weight: 700;
+            font-size: 0.7rem;
+            margin-bottom: 0.25rem;
+        }
+        .gap-card.red .gap-title { color: #991b1b; }
+        .gap-card.orange .gap-title { color: #9a3412; }
+        .gap-card.yellow .gap-title { color: #854d0e; }
+        .gap-card.green .gap-title { color: #166534; }
+        .gap-card.blue .gap-title { color: #1e40af; }
+        .gap-card.purple .gap-title { color: #6b21a8; }
+        
+        /* Logic items */
+        .logic-item {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.375rem;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .logic-label {
+            font-weight: 600;
+            color: #475569;
+            font-size: 0.7rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .three-panel-grid {
+                grid-template-columns: 1fr;
+                height: auto;
+                overflow-y: auto;
+            }
+            .panel-card {
+                height: auto;
+                max-height: none;
+            }
+            .panel-content {
+                max-height: 600px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .three-panel-grid {
+                padding: 1rem;
+                gap: 1rem;
+            }
+        }
     </style>
 </head>
-<body class="p-6">
+<body>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 h-full">
-        <!-- 左侧面板：Islamic Finance Theory -->
-        <div class="panel-card border-t-4 border-t-amber-600">
+    <!-- Three Panel Layout -->
+    <div class="three-panel-grid">
+        
+        <!-- Left Panel: Islamic Finance Theory -->
+        <div class="panel-card border-t-4 border-t-amber">
             <div class="panel-header">
                 <h3 class="text-lg font-bold text-slate-800">Islamic Finance Theory | 伊斯兰金融理论</h3>
             </div>
             <div class="panel-content space-y-4">
                 <div class="bg-amber-50 rounded-lg p-3 border border-amber-200">
                     <h4 class="font-bold text-amber-900 text-xs mb-2">Core Tension | 核心张力</h4>
-                    <div class="mb-2">
-                        <span class="bilingual-en font-medium">Form-compliance vs Essence-compliance</span>
-                        <span class="bilingual-cn">形式合规 vs 本质合规</span>
+                    <div class="bilingual-item">
+                        <span class="bilingual-en font-medium">Form-compliance vs Essence-compliance (El-Gamal, 2006; Al-Jarhi, 2017)</span>
+                        <span class="bilingual-cn">形式合规 vs 本质合规：部分产品形式上满足教法要求，但实质上接近传统债务工具</span>
+                    </div>
+                    <div class="bilingual-item">
+                        <span class="bilingual-en">Commercial viability vs Religious authenticity tension throughout historical evolution</span>
+                        <span class="bilingual-cn">商业可行性与宗教真实性之间的贯穿性张力</span>
                     </div>
                 </div>
 
-                <!-- 伊斯兰金融谱系入口 -->
-                <div class="bg-gradient-to-r from-emerald-50 to-blue-50 rounded-lg p-4 border-2 border-emerald-300 cursor-pointer hover:shadow-lg transition-all duration-300 group" onclick="openSpectrum()">
-                    <div class="flex items-center justify-between mb-2">
-                        <h4 class="font-bold text-emerald-800 text-sm">Key Instruments | 核心金融工具谱系</h4>
-                        <span class="bg-emerald-600 text-white text-[10px] px-2 py-1 rounded-full animate-pulse">点击查看</span>
-                    </div>
-                    <p class="bilingual-en text-xs text-slate-600 mb-2">Click to view the interactive spectrum from Form-based (Murabaha) to Substance-based (Mudaraba) compliance...</p>
-                    <p class="bilingual-cn text-xs text-slate-500">点击查看交互式谱系：从形式合规到本质合规的完整演进路径</p>
-                    <div class="mt-3 flex gap-2">
-                        <span class="text-[10px] px-2 py-1 rounded bg-rose-100 text-rose-700 border border-rose-200">Murabaha</span>
-                        <span class="text-[10px] px-2 py-1 rounded bg-orange-100 text-orange-700 border border-orange-200">Ijarah</span>
-                        <span class="text-[10px] px-2 py-1 rounded bg-blue-100 text-blue-700 border border-blue-200">Sukuk</span>
-                        <span class="text-[10px] px-2 py-1 rounded bg-emerald-100 text-emerald-700 border border-emerald-200">Mudaraba</span>
+                <div class="bg-white rounded-lg p-3 border border-slate-200">
+                    <h4 class="font-bold text-slate-800 text-xs mb-2">Key Instruments | 核心金融工具谱系</h4>
+                    <div class="space-y-2">
+                        <div class="bilingual-item">
+                            <span class="bilingual-en"><span class="font-medium">Murabaha (成本加价):</span> Cost-plus financing, most common but criticized as "debt-like"</span>
+                            <span class="bilingual-cn">成本加价融资，最常用但被批评类似债务</span>
+                        </div>
+                        <div class="bilingual-item">
+                            <span class="bilingual-en"><span class="font-medium">Ijara (租赁):</span> Leasing-based, closer to Islamic finance essence</span>
+                            <span class="bilingual-cn">租赁融资，更接近伊斯兰金融本质</span>
+                        </div>
+                        <div class="bilingual-item">
+                            <span class="bilingual-en"><span class="font-medium">Mudaraba/Musharaka (合伙):</span> Profit-sharing partnerships, essence-compliant but complex</span>
+                            <span class="bilingual-cn">利润分享合伙，符合本质但结构复杂</span>
+                        </div>
+                        <div class="bilingual-item">
+                            <span class="bilingual-en"><span class="font-medium">Sukuk (伊斯兰债券):</span> Asset-backed securities, key innovation for capital markets</span>
+                            <span class="bilingual-cn">资产支持证券，资本市场关键创新</span>
+                        </div>
                     </div>
                 </div>
 
                 <div class="bg-blue-50 rounded-lg p-3 border border-blue-200">
                     <h4 class="font-bold text-blue-900 text-xs mb-1">Malaysian Model | 马来西亚模式</h4>
-                    <div class="bilingual-en">Dual Banking System, Centralized SAC, Embedded in NEP</div>
-                    <div class="bilingual-cn">双银行体系、集中化教法委员会、嵌入新经济政策</div>
+                    <div class="bilingual-item">
+                        <span class="bilingual-en"><span class="font-medium">Dual Banking System:</span> Conventional and Islamic banks operating in parallel with unified regulatory framework</span>
+                        <span class="bilingual-cn">双银行体系：传统与伊斯兰银行并行运作，统一监管框架</span>
+                    </div>
+                    <div class="bilingual-item">
+                        <span class="bilingual-en"><span class="font-medium">Centralized SAC:</span> Shariah Advisory Council providing binding rulings for entire industry</span>
+                        <span class="bilingual-cn">集中化教法委员会：为全行业提供具有约束力的教法裁决</span>
+                    </div>
+                    <div class="bilingual-item">
+                        <span class="bilingual-en"><span class="font-medium">Embedded in NEP:</span> Linked to Bumiputera economic empowerment policy, creating political legitimacy</span>
+                        <span class="bilingual-cn">嵌入新经济政策：与土著经济政策关联，创造政治合法性</span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 中间面板：3D Framework -->
-        <div class="panel-card border-t-4 border-t-amber-600">
+        <!-- Center Panel: 3D Framework -->
+        <div class="panel-card border-t-4 border-t-amber">
             <div class="panel-header">
                 <h3 class="text-lg font-bold text-slate-800">3D Framework | 三维互动框架</h3>
             </div>
             <div class="panel-content space-y-4">
                 <div class="bg-gradient-to-br from-amber-50 to-white border border-amber-200 rounded-lg p-3">
                     <h4 class="font-bold text-amber-900 text-xs mb-2">Framework Dimensions | 框架维度</h4>
-                    <div class="space-y-2">
-                        <div class="bg-white p-2 rounded border-l-4 border-blue-400 shadow-sm">
-                            <div class="bilingual-en font-bold text-slate-700">Strategic Alignment Layer | 战略协同层</div>
-                            <div class="bilingual-cn text-xs text-slate-500">国家政策协调、双边协议、政治意愿</div>
-                        </div>
-                        <div class="bg-white p-2 rounded border-l-4 border-amber-400 shadow-sm">
-                            <div class="bilingual-en font-bold text-slate-700">Institutional Coordination Layer | 制度协同层</div>
-                            <div class="bilingual-cn text-xs text-slate-500">监管框架、教法治理、法律基础设施</div>
-                        </div>
-                        <div class="bg-white p-2 rounded border-l-4 border-green-400 shadow-sm">
-                            <div class="bilingual-en font-bold text-slate-700">Market Integration Layer | 市场融合层</div>
-                            <div class="bilingual-cn text-xs text-slate-500">产品创新、资本流动、机构合作</div>
-                        </div>
+                    
+                    <div class="dimension-card strategy">
+                        <div class="dimension-title">Strategic Alignment Layer | 战略协同层</div>
+                        <div class="dimension-en">National policy coordination, bilateral agreements, political will, strategic positioning</div>
+                        <div class="dimension-cn">国家政策协调、双边协议、政治意愿、战略定位</div>
+                    </div>
+                    
+                    <div class="dimension-card institution">
+                        <div class="dimension-title">Institutional Coordination Layer | 制度协同层</div>
+                        <div class="dimension-en">Regulatory frameworks, Shariah governance, legal infrastructure, professional talent</div>
+                        <div class="dimension-cn">监管框架、教法治理、法律基础设施、专业人才</div>
+                    </div>
+                    
+                    <div class="dimension-card market">
+                        <div class="dimension-title">Market Integration Layer | 市场融合层</div>
+                        <div class="dimension-en">Product innovation, capital flows, institutional partnerships, investor networks</div>
+                        <div class="dimension-cn">产品创新、资本流动、机构合作、投资者网络</div>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-slate-200 rounded-lg p-3">
+                    <h4 class="font-bold text-slate-800 text-xs mb-2">Interaction Logics | 互动逻辑</h4>
+                    
+                    <div class="logic-item">
+                        <span class="logic-label">Top-down Empowerment | 自上而下赋能</span>
+                        <div class="bilingual-en text-xs mt-1">Strategic commitment enables institutional development and market activities</div>
+                        <div class="bilingual-cn text-xs">战略承诺推动制度发展和市场活动</div>
+                    </div>
+                    
+                    <div class="logic-item">
+                        <span class="logic-label">Bottom-up Feedback | 自下而上反馈</span>
+                        <div class="bilingual-en text-xs mt-1">Market success reinforces strategic commitment and institutional investment</div>
+                        <div class="bilingual-cn text-xs">市场成功强化战略承诺和制度投资</div>
+                    </div>
+                    
+                    <div class="logic-item">
+                        <span class="logic-label">Horizontal Spillover | 横向溢出</span>
+                        <div class="bilingual-en text-xs mt-1">Developments within one dimension create lateral effects</div>
+                        <div class="bilingual-cn text-xs">同一维度内的发展产生横向效应</div>
+                    </div>
+                    
+                    <div class="logic-item">
+                        <span class="logic-label">Recursive Reinforcement | 递归强化</span>
+                        <div class="bilingual-en text-xs mt-1">Cross-dimensional interactions create self-reinforcing dynamics</div>
+                        <div class="bilingual-cn text-xs">跨维度互动创造自我强化的动态机制</div>
+                    </div>
+                </div>
+
+                <div class="bg-green-50 rounded-lg p-3 border border-green-200">
+                    <h4 class="font-bold text-green-900 text-xs mb-1">BRI Financial Cooperation | 一带一路金融合作</h4>
+                    <div class="bilingual-item">
+                        <span class="bilingual-en">Policy banks (CDB, Exim Bank), AIIB, Silk Road Fund, and the need for diversified financing channels.</span>
+                        <span class="bilingual-cn">政策性银行（国开行、进出口银行）、亚投行、丝路基金，以及融资渠道多元化的需求。</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- 右侧面板：Gaps & Theory -->
-        <div class="panel-card border-t-4 border-t-amber-600">
+        <!-- Right Panel: Gaps & Theory -->
+        <div class="panel-card border-t-4 border-t-amber">
             <div class="panel-header">
                 <h3 class="text-lg font-bold text-slate-800">Gaps & Theory | 空白与理论</h3>
             </div>
             <div class="panel-content space-y-3">
-                <div class="bg-red-50 rounded-lg p-3 border-l-4 border-red-400">
-                    <h4 class="font-bold text-red-900 text-xs mb-1">Discursive Fragmentation | 话语割裂</h4>
-                    <div class="bilingual-cn">伊斯兰金融与一带一路研究平行运行，缺乏交叉融合</div>
+                <div class="gap-card red">
+                    <div class="gap-title">Discursive Fragmentation | 话语割裂</div>
+                    <div class="bilingual-en text-xs">Islamic finance and BRI studies operate in parallel with limited cross-fertilization</div>
+                    <div class="bilingual-cn text-xs">伊斯兰金融与一带一路研究平行运行，缺乏交叉融合</div>
                 </div>
-                <div class="bg-orange-50 rounded-lg p-3 border-l-4 border-orange-400">
-                    <h4 class="font-bold text-orange-900 text-xs mb-1">Single-Level Analysis | 单一层次分析</h4>
-                    <div class="bilingual-cn">缺乏连接宏观战略、中观制度与微观市场的中观框架</div>
+                
+                <div class="gap-card orange">
+                    <div class="gap-title">Single-Level Analysis | 单一层次分析</div>
+                    <div class="bilingual-en text-xs">Lack of meso-level framework connecting macro-strategy, meso-institution, and micro-market</div>
+                    <div class="bilingual-cn text-xs">缺乏连接宏观战略、中观制度与微观市场的中观框架</div>
                 </div>
-                <div class="bg-green-50 rounded-lg p-3 border-l-4 border-green-400">
-                    <h4 class="font-bold text-green-900 text-xs mb-1">Mechanism Identification | 机制识别有限</h4>
-                    <div class="bilingual-cn">描述互动的存在而非解释因果机制</div>
+                
+                <div class="gap-card yellow">
+                    <div class="gap-title">Case Study Deficit | 案例聚焦不足</div>
+                    <div class="bilingual-en text-xs">Limited systematic case study on KL's pathway as specialized IFC interacting with BRI</div>
+                    <div class="bilingual-cn text-xs">缺乏将吉隆坡作为专业金融中心与一带一路互动的系统案例研究</div>
+                </div>
+                
+                <div class="gap-card green">
+                    <div class="gap-title">Mechanism Identification | 机制识别有限</div>
+                    <div class="bilingual-en text-xs">Describing existence of interaction rather than explaining causal mechanisms</div>
+                    <div class="bilingual-cn text-xs">描述互动的存在而非解释因果机制</div>
+                </div>
+                
+                <div class="gap-card blue">
+                    <div class="gap-title">IFC Theory | 金融中心理论</div>
+                    <div class="bilingual-en text-xs">Specialization strategy (Poon et al., 2016), Path dependence (DiMaggio & Powell, 1983), Frontier position</div>
+                    <div class="bilingual-cn text-xs">专业化战略、路径依赖、前沿定位理论</div>
+                </div>
+                
+                <div class="gap-card purple">
+                    <div class="gap-title">Developmental State | 发展型国家</div>
+                    <div class="bilingual-en text-xs">State-led industrial policy approach in financial sector (Lai, 2015; Rethel, 2021)</div>
+                    <div class="bilingual-cn text-xs">金融领域国家主导的产业政策方法</div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- 伊斯兰金融谱系三级页面模态框 -->
-    <div id="spectrumModal" class="spectrum-modal" onclick="closeSpectrumOnBackdrop(event)">
-        <div class="spectrum-content" onclick="event.stopPropagation()">
-            <button class="close-spectrum" onclick="closeSpectrum()">×</button>
-            <iframe src="islamic-spectrum.html" class="spectrum-iframe" title="Islamic Finance Spectrum"></iframe>
-        </div>
     </div>
-
-    <script>
-        function openSpectrum() {
-            document.getElementById('spectrumModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeSpectrum() {
-            document.getElementById('spectrumModal').classList.remove('active');
-            document.body.style.overflow = '';
-        }
-        
-        function closeSpectrumOnBackdrop(event) {
-            if (event.target === event.currentTarget) {
-                closeSpectrum();
-            }
-        }
-        
-        // ESC键关闭
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeSpectrum();
-            }
-        });
-    </script>
 
 </body>
 </html>
