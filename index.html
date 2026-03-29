@@ -7,6 +7,150 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* 伊斯兰金融谱系专用样式 - 添加到主文件style标签底部 */
+.spectrum-modal .glass-content {
+    max-width: 95vw;
+    width: 100%;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.islamic-pattern-spectrum {
+    background-image: 
+        radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(5, 150, 105, 0.03) 0%, transparent 50%);
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.spectrum-line {
+    background: linear-gradient(90deg, 
+        #be123c 0%, 
+        #ea580c 25%, 
+        #1e40af 50%, 
+        #059669 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.spectrum-line::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+.instrument-card-spectrum {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.instrument-card-spectrum:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.15);
+}
+
+.instrument-card-spectrum.active {
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.timeline-node-spectrum {
+    position: relative;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.timeline-node-spectrum.active {
+    transform: scale(1.15);
+}
+
+.timeline-node-spectrum.active .timeline-dot-spectrum {
+    box-shadow: 0 0 0 4px rgba(255,255,255,0.8), 0 0 0 8px currentColor;
+    animation: pulse-ring 2s infinite;
+}
+
+@keyframes pulse-ring {
+    0% { box-shadow: 0 0 0 4px rgba(255,255,255,0.8), 0 0 0 0 currentColor; }
+    70% { box-shadow: 0 0 0 4px rgba(255,255,255,0.8), 0 0 0 12px transparent; }
+    100% { box-shadow: 0 0 0 4px rgba(255,255,255,0.8), 0 0 0 0 transparent; }
+}
+
+.detail-overlay-spectrum {
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.detail-overlay-spectrum.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.detail-content-spectrum {
+    transform: scale(0.95) translateY(20px);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.detail-overlay-spectrum.active .detail-content-spectrum {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+.lang-block {
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 0.5rem;
+    border-left: 3px solid;
+}
+
+.lang-block.en { border-color: #cbd5e1; }
+.lang-block.zh { border-color: #059669; }
+
+.glow-spectrum {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(40px);
+}
+
+/* 双语列表样式 */
+.list-bilingual-spectrum li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    padding-bottom: 0.5rem;
+}
+
+.list-bilingual-spectrum .en-text { 
+    font-size: 0.85rem; 
+    color: #475569; 
+    font-weight: 500;
+}
+
+.list-bilingual-spectrum .zh-text { 
+    font-size: 0.8rem; 
+    color: #64748b; 
+    font-family: 'Noto Serif SC', serif;
+}
         body {
             font-family: 'Inter', sans-serif;
         }
@@ -1235,6 +1379,23 @@
 
                             <div class="bg-white rounded-lg p-3 border border-slate-200">
                                 <h4 class="font-bold text-slate-800 text-xs mb-2">Key Instruments | 核心金融工具谱系</h4>
+                                <!-- 找到这行附近的代码并替换 -->
+<div class="bg-white rounded-lg p-3 border border-slate-200 cursor-pointer hover:bg-amber-50 transition-all duration-300 hover:shadow-md hover:border-amber-300" onclick="openSpectrumModal()">
+    <h4 class="font-bold text-slate-800 text-xs mb-2 flex items-center justify-between">
+        <span>Key Instruments | 核心金融工具谱系</span>
+        <span class="text-[10px] bg-amber-600 text-white px-2 py-0.5 rounded-full animate-pulse">Click · 点击</span>
+    </h4>
+    <div class="bilingual-item">
+        <span class="bilingual-en text-xs text-slate-500 italic">Click to view the interactive spectrum from Form-based (Murabaha) to Substance-based (Mudaraka) compliance...</span>
+        <span class="bilingual-cn text-xs text-slate-400 serif">点击查看交互式谱系：从形式合规(Murabaha)到本质合规(Mudaraba)的完整演进路径...</span>
+    </div>
+    <div class="mt-2 flex gap-1">
+        <span class="text-[10px] px-1.5 py-0.5 rounded bg-rose-100 text-rose-700">Murabaha</span>
+        <span class="text-[10px] px-1.5 py-0.5 rounded bg-orange-100 text-orange-700">Ijarah</span>
+        <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-700">Sukuk</span>
+        <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700">Mudaraba</span>
+    </div>
+</div>
                                 <div class="space-y-2">
                                     <div class="bilingual-item">
                                         <span class="bilingual-en"><span class="font-medium">Murabaha (成本加价):</span> Cost-plus financing, most common but criticized as "debt-like"</span>
@@ -1254,7 +1415,294 @@
                                     </div>
                                 </div>
                             </div>
+    <!-- MODAL 02-SPECTRUM: Islamic Finance Instruments Spectrum (Third-level) -->
+    <div id="modal02-spectrum" class="glass-modal spectrum-modal" onclick="closeSpectrumModal(event)">
+        <div class="glass-backdrop"></div>
+        <div class="glass-content" onclick="event.stopPropagation()">
+            <div class="glass-header bg-gradient-to-r from-emerald-700 to-blue-800 text-white p-6 flex justify-between items-start">
+                <div>
+                    <div class="text-xs text-emerald-200 uppercase tracking-wider mb-1">Islamic Finance Theory · 伊斯兰金融理论</div>
+                    <h2 class="text-2xl font-bold serif-sc">Spectrum of Islamic Financial Instruments · 伊斯兰金融工具谱系</h2>
+                </div>
+                <button onclick="closeSpectrumModal()" class="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors backdrop-blur border border-white/30 shrink-0">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="glass-body" style="padding: 0; overflow-y: auto;">
+                
+                <!-- 谱系页面内容开始 -->
+                <div class="relative min-h-full flex flex-col text-slate-800 p-6">
+                    <div class="islamic-pattern-spectrum"></div>
+                    <div class="glow-spectrum top-0 left-1/4"></div>
+                    <div class="glow-spectrum bottom-0 right-1/4"></div>
 
+                    <main class="relative z-10 flex flex-col">
+                        <!-- Header -->
+                        <header class="text-center mb-8 space-y-2">
+                            <div class="inline-block mb-2">
+                                <span class="px-4 py-1.5 rounded-full bg-slate-900 text-amber-400 text-xs font-semibold tracking-widest uppercase border border-amber-400/30">
+                                    Islamic Finance Architecture · 伊斯兰金融体系架构
+                                </span>
+                            </div>
+                            <h1 class="text-3xl md:text-4xl font-bold text-slate-900 leading-tight" style="font-family: 'Playfair Display', serif;">
+                                Spectrum of Islamic Finance
+                            </h1>
+                            <h2 class="text-xl md:text-2xl font-bold text-slate-700 serif mt-1">
+                                伊斯兰金融工具谱系
+                            </h2>
+                            <div class="text-slate-500 text-sm max-w-2xl mx-auto font-light leading-relaxed mt-2 space-y-1">
+                                <p>From Form-based to Substance-based Compliance with Shariah Principles</p>
+                                <p class="serif text-slate-400">从形式合规到本质合规：教法精神的渐进实现</p>
+                            </div>
+                        </header>
+
+                        <!-- Spectrum Axis -->
+                        <section class="mb-8 relative">
+                            <div class="bg-white/70 backdrop-blur-md rounded-2xl p-4 md:p-6 shadow-lg border border-white/50">
+                                <div class="flex flex-col md:flex-row justify-between items-center mb-4 text-sm font-medium text-slate-500 gap-4">
+                                    <div class="text-center md:text-left">
+                                        <div class="text-rose-700 font-bold text-base">Form-based Compliance</div>
+                                        <div class="text-rose-600 font-medium text-sm serif">形式合规</div>
+                                        <div class="text-xs text-slate-400 mt-1">Technical Avoidance of Riba · 技术性规避利息禁令</div>
+                                    </div>
+                                    
+                                    <div class="flex-1 w-full mx-0 md:mx-8 relative my-2 md:my-0">
+                                        <div class="spectrum-line h-2 rounded-full w-full shadow-inner"></div>
+                                        <div class="absolute -top-5 left-1/2 transform -translate-x-1/2 flex flex-col md:flex-row gap-2 md:gap-8 text-xs text-slate-400 whitespace-nowrap text-center">
+                                            <span>◀ Increasing Risk-sharing · 风险共担程度递增</span>
+                                            <span>Asset Backing · 资产支持程度递增 ▶</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="text-center md:text-right">
+                                        <div class="text-emerald-700 font-bold text-base">Substance-based Compliance</div>
+                                        <div class="text-emerald-600 font-medium text-sm serif">本质合规</div>
+                                        <div class="text-xs text-slate-400 mt-1">Embodiment of Islamic Ethos · 教法精神内核体现</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Cards Grid -->
+                        <section class="flex-1 mb-8">
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
+                                
+                                <!-- Murabaha -->
+                                <div class="instrument-card-spectrum group bg-white rounded-2xl shadow-lg shadow-slate-200/50 border border-slate-100 flex flex-col" onclick="showInstrumentDetail('murabaha')">
+                                    <div class="h-1 bg-rose-600"></div>
+                                    <div class="p-4 flex flex-col flex-1">
+                                        <div class="flex justify-between items-start mb-3">
+                                            <div class="w-12 h-12 rounded-xl bg-rose-50 flex items-center justify-center text-xl border border-rose-100 group-hover:scale-110 transition-transform duration-300">
+                                                💰
+                                            </div>
+                                            <span class="inline-block px-3 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-100 text-xs font-bold">
+                                                Entry Level · 入门级
+                                            </span>
+                                        </div>
+                                        
+                                        <h3 class="text-xl font-bold text-rose-700 mb-0" style="font-family: 'Playfair Display', serif;">Murabaha</h3>
+                                        <p class="serif text-base font-medium text-rose-600 mb-1">成本加价</p>
+                                        <p class="text-xs text-rose-400 mb-3 uppercase tracking-wider">Cost-Plus Sale</p>
+                                        
+                                        <ul class="space-y-2 text-sm flex-1 list-bilingual-spectrum">
+                                            <li>
+                                                <span class="en-text">Fixed predetermined markup</span>
+                                                <span class="zh-text">固定利润率</span>
+                                            </li>
+                                            <li>
+                                                <span class="en-text">Debt-based financing</span>
+                                                <span class="zh-text">债务型融资结构</span>
+                                            </li>
+                                            <li>
+                                                <span class="en-text">Minimal risk-sharing</span>
+                                                <span class="zh-text">最低程度风险共担</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- Ijarah -->
+                                <div class="instrument-card-spectrum group bg-white rounded-2xl shadow-lg shadow-slate-200/50 border border-slate-100 flex flex-col" onclick="showInstrumentDetail('ijarah')">
+                                    <div class="h-1 bg-orange-600"></div>
+                                    <div class="p-4 flex flex-col flex-1">
+                                        <div class="flex justify-between items-start mb-3">
+                                            <div class="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center text-xl border border-orange-100 group-hover:scale-110 transition-transform duration-300">
+                                                🏢
+                                            </div>
+                                            <span class="inline-block px-3 py-1 rounded-full bg-orange-50 text-orange-700 border border-orange-100 text-xs font-bold">
+                                                Intermediate · 进阶级
+                                            </span>
+                                        </div>
+                                        
+                                        <h3 class="text-xl font-bold text-orange-700 mb-0" style="font-family: 'Playfair Display', serif;">Ijarah</h3>
+                                        <p class="serif text-base font-medium text-orange-600 mb-1">租赁融资</p>
+                                        <p class="text-xs text-orange-400 mb-3 uppercase tracking-wider">Leasing Contract</p>
+                                        
+                                        <ul class="space-y-2 text-sm flex-1 list-bilingual-spectrum">
+                                            <li>
+                                                <span class="en-text">Real asset-backed</span>
+                                                <span class="zh-text">真实资产支持融资</span>
+                                            </li>
+                                            <li>
+                                                <span class="en-text">Fixed rental payments</span>
+                                                <span class="zh-text">固定租金支付</span>
+                                            </li>
+                                            <li>
+                                                <span class="en-text">Transfer of usufruct only</span>
+                                                <span class="zh-text">仅使用权转移</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- Sukuk -->
+                                <div class="instrument-card-spectrum group bg-white rounded-2xl shadow-lg shadow-slate-200/50 border border-slate-100 flex flex-col" onclick="showInstrumentDetail('sukuk')">
+                                    <div class="h-1 bg-blue-600"></div>
+                                    <div class="p-4 flex flex-col flex-1">
+                                        <div class="flex justify-between items-start mb-3">
+                                            <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-xl border border-blue-100 group-hover:scale-110 transition-transform duration-300">
+                                                📊
+                                            </div>
+                                            <span class="inline-block px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100 text-xs font-bold">
+                                                Hybrid · 融合级
+                                            </span>
+                                        </div>
+                                        
+                                        <h3 class="text-xl font-bold text-blue-700 mb-0" style="font-family: 'Playfair Display', serif;">Sukuk</h3>
+                                        <p class="serif text-base font-medium text-blue-600 mb-1">伊斯兰债券</p>
+                                        <p class="text-xs text-blue-400 mb-3 uppercase tracking-wider">Islamic Bonds</p>
+                                        
+                                        <ul class="space-y-2 text-sm flex-1 list-bilingual-spectrum">
+                                            <li>
+                                                <span class="en-text">Asset pool backing</span>
+                                                <span class="zh-text">资产池连结支持</span>
+                                            </li>
+                                            <li>
+                                                <span class="en-text">Variable returns</span>
+                                                <span class="zh-text">收益浮动不确定</span>
+                                            </li>
+                                            <li>
+                                                <span class="en-text">Securitized structure</span>
+                                                <span class="zh-text">证券化混合结构</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- Mudaraba -->
+                                <div class="instrument-card-spectrum group bg-gradient-to-br from-white to-emerald-50/50 rounded-2xl shadow-xl shadow-emerald-100/50 border-2 border-emerald-500/30 flex flex-col" onclick="showInstrumentDetail('mudaraba')">
+                                    <div class="h-1 bg-emerald-600"></div>
+                                    <div class="p-4 flex flex-col flex-1">
+                                        <div class="flex justify-between items-start mb-3">
+                                            <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center text-xl border border-emerald-200 group-hover:scale-110 transition-transform duration-300 shadow-inner">
+                                                🤝
+                                            </div>
+                                            <span class="inline-block px-3 py-1 rounded-full bg-emerald-600 text-white border border-emerald-500 shadow-md text-xs font-bold">
+                                                Ideal Type · 本质级
+                                            </span>
+                                        </div>
+                                        
+                                        <h3 class="text-lg font-bold text-emerald-800 mb-0" style="font-family: 'Playfair Display', serif;">Mudaraba / Musharaka</h3>
+                                        <p class="serif text-sm font-medium text-emerald-700 mb-1">利润分享 / 股权合伙</p>
+                                        <p class="text-xs text-emerald-500 mb-3 uppercase tracking-wider">Profit-Loss Sharing</p>
+                                        
+                                        <ul class="space-y-2 text-sm flex-1 list-bilingual-spectrum">
+                                            <li>
+                                                <span class="en-text font-medium">Authentic risk-sharing</span>
+                                                <span class="zh-text">真正的盈亏共享</span>
+                                            </li>
+                                            <li>
+                                                <span class="en-text font-medium">Full risk participation</span>
+                                                <span class="zh-text">完全风险参与承担</span>
+                                            </li>
+                                            <li>
+                                                <span class="en-text font-medium">Equity-based partnership</span>
+                                                <span class="zh-text">权益型合伙关系</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </section>
+
+                        <!-- Timeline -->
+                        <section class="mb-6">
+                            <div class="bg-white/70 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50">
+                                <h2 class="text-lg font-bold text-center text-slate-800 mb-2" style="font-family: 'Playfair Display', serif;">
+                                    Core Principles: Progressive Realization
+                                </h2>
+                                <h3 class="text-base font-bold text-center text-slate-600 mb-6 serif">
+                                    伊斯兰金融核心原则递进：渐进实现
+                                </h3>
+                                
+                                <div class="relative">
+                                    <div class="absolute top-6 left-[12%] right-[12%] h-0.5 bg-gradient-to-r from-rose-400 via-orange-400 via-blue-400 to-emerald-500"></div>
+                                    
+                                    <div class="grid grid-cols-4 gap-2 md:gap-4 relative">
+                                        <div class="timeline-node-spectrum flex flex-col items-center text-center" onclick="highlightStep(0)">
+                                            <div class="timeline-dot-spectrum w-10 h-10 md:w-12 md:h-12 rounded-full bg-white border-2 border-rose-500 text-rose-600 flex items-center justify-center font-bold text-sm md:text-base shadow-md mb-2 transition-all duration-300">1</div>
+                                            <h4 class="font-bold text-slate-800 text-xs md:text-sm mb-0.5">Prohibition of Riba</h4>
+                                            <p class="text-xs text-rose-600 serif">禁止利息</p>
+                                        </div>
+                                        
+                                        <div class="timeline-node-spectrum flex flex-col items-center text-center" onclick="highlightStep(1)">
+                                            <div class="timeline-dot-spectrum w-10 h-10 md:w-12 md:h-12 rounded-full bg-white border-2 border-orange-500 text-orange-600 flex items-center justify-center font-bold text-sm md:text-base shadow-md mb-2 transition-all duration-300">2</div>
+                                            <h4 class="font-bold text-slate-800 text-xs md:text-sm mb-0.5">Asset Backing</h4>
+                                            <p class="text-xs text-orange-600 serif">资产支持</p>
+                                        </div>
+                                        
+                                        <div class="timeline-node-spectrum flex flex-col items-center text-center" onclick="highlightStep(2)">
+                                            <div class="timeline-dot-spectrum w-10 h-10 md:w-12 md:h-12 rounded-full bg-white border-2 border-blue-500 text-blue-600 flex items-center justify-center font-bold text-sm md:text-base shadow-md mb-2 transition-all duration-300">3</div>
+                                            <h4 class="font-bold text-slate-800 text-xs md:text-sm mb-0.5">Risk Sharing</h4>
+                                            <p class="text-xs text-blue-600 serif">风险分担</p>
+                                        </div>
+                                        
+                                        <div class="timeline-node-spectrum flex flex-col items-center text-center" onclick="highlightStep(3)">
+                                            <div class="timeline-dot-spectrum w-10 h-10 md:w-12 md:h-12 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-sm md:text-base shadow-lg shadow-emerald-200 mb-2 transition-all duration-300 ring-2 ring-emerald-100">4</div>
+                                            <h4 class="font-bold text-emerald-800 text-xs md:text-sm mb-0.5">Profit-Loss Sharing</h4>
+                                            <p class="text-xs text-emerald-700 serif">盈亏共享</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Footer -->
+                        <footer class="text-center space-y-3 pb-2">
+                            <div class="inline-block p-4 rounded-xl bg-slate-900 text-amber-50 max-w-3xl shadow-xl">
+                                <p class="text-sm leading-relaxed">
+                                    <span class="text-amber-400 font-bold">🎯 Key Insight:</span> Mudaraba and Musharaka embody the substantive spirit of Islamic finance—"risk-sharing and asset-backed investment"
+                                </p>
+                                <p class="text-xs leading-relaxed text-amber-100/90 serif border-t border-amber-400/30 pt-2 mt-2">
+                                    <span class="text-amber-300 font-bold">核心观点：</span>Mudaraba 与 Musharaka 体现伊斯兰金融<span class="text-amber-300 font-semibold">"风险共担、资产支持"</span>的本质精神
+                                </p>
+                            </div>
+                        </footer>
+
+                    </main>
+                </div>
+                <!-- 谱系页面内容结束 -->
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 谱系详情浮层（第四级，点击卡片后显示） -->
+    <div id="spectrum-detail-panel" class="detail-overlay-spectrum fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" onclick="closeInstrumentDetail(event)">
+        <div class="detail-content-spectrum bg-white rounded-2xl max-w-4xl w-full max-h-[85vh] overflow-y-auto shadow-2xl" onclick="event.stopPropagation()">
+            <div class="sticky top-0 bg-white/90 backdrop-blur-md border-b border-slate-100 p-6 flex justify-between items-start z-10">
+                <div>
+                    <h3 id="spectrumDetailTitle" class="text-2xl font-bold text-slate-900 mb-1" style="font-family: 'Playfair Display', serif;"></h3>
+                    <p id="spectrumDetailSubtitle" class="text-slate-500 font-medium serif"></p>
+                </div>
+                <button onclick="closeInstrumentDetail()" class="w-10 h-10 rounded-full hover:bg-slate-100 flex items-center justify-center transition-colors text-slate-400 hover:text-slate-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div id="spectrumDetailBody" class="p-6 space-y-6"></div>
+        </div>
+    </div>
                             <div class="bg-blue-50 rounded-lg p-3 border border-blue-200">
                                 <h4 class="font-bold text-blue-900 text-xs mb-1">Malaysian Model | 马来西亚模式</h4>
                                 <div class="bilingual-item">
@@ -2332,6 +2780,191 @@
                 }
             }
         });
+        // 伊斯兰金融谱系模态框控制
+function openSpectrumModal() {
+    document.getElementById('modal02-spectrum').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    // 启动时间线动画
+    startTimelineAnimation();
+}
+
+function closeSpectrumModal(event) {
+    if (!event || event.target.classList.contains('glass-backdrop') || event.target.closest('button')) {
+        document.getElementById('modal02-spectrum').classList.remove('active');
+        document.body.style.overflow = '';
+        
+        // 关闭所有详情浮层
+        document.getElementById('spectrum-detail-panel').classList.remove('active');
+    }
+}
+
+// 谱系详情数据
+const spectrumData = {
+    murabaha: {
+        color: '#be123c',
+        title: 'Murabaha · 成本加价',
+        subtitle: 'Cost-Plus Sale · 成本加价',
+        content: `
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="lang-block en">
+                    <h5 class="font-bold text-slate-700 mb-2 text-xs uppercase tracking-wider">Definition</h5>
+                    <p class="text-sm text-slate-600 leading-relaxed">A sales contract where the seller discloses the cost and adds a predetermined markup. The buyer pays in installments or deferred lump sum.</p>
+                </div>
+                <div class="lang-block zh">
+                    <h5 class="font-bold text-slate-700 mb-2 text-xs uppercase tracking-wider">定义</h5>
+                    <p class="text-sm text-slate-600 leading-relaxed">卖方披露成本并添加预定利润率的销售合同。买方以分期或延期方式支付总价。</p>
+                </div>
+                <div class="lang-block en">
+                    <h5 class="font-bold text-slate-700 mb-2 text-xs uppercase tracking-wider">Critique</h5>
+                    <p class="text-sm text-slate-600 leading-relaxed">Criticized as "Islamicized interest" due to fixed returns and minimal risk transfer. Represents formal compliance.</p>
+                </div>
+                <div class="lang-block zh">
+                    <h5 class="font-bold text-slate-700 mb-2 text-xs uppercase tracking-wider">批判</h5>
+                    <p class="text-sm text-slate-600 leading-relaxed">因固定回报和最小风险转移被批评为"伊斯兰化利息"。仅代表形式合规。</p>
+                </div>
+            </div>
+        `
+    },
+    ijarah: {
+        color: '#ea580c',
+        title: 'Ijarah · 租赁融资',
+        subtitle: 'Leasing Contract · 租赁合约',
+        content: `
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="lang-block en">
+                    <h5 class="font-bold text-slate-700 mb-2 text-xs uppercase tracking-wider">Definition</h5>
+                    <p class="text-sm text-slate-600 leading-relaxed">Lease contract transferring only the usufruct (benefits of use) for a specified period in return for rent, without transferring ownership.</p>
+                </div>
+                <div class="lang-block zh">
+                    <h5 class="font-bold text-slate-700 mb-2 text-xs uppercase tracking-wider">定义</h5>
+                    <p class="text-sm text-slate-600 leading-relaxed">仅转让资产使用权（用益权）的租赁合同，指定期限内收取租金，不转让所有权。</p>
+                </div>
+                <div class="lang-block en">
+                    <h5 class="font-bold text-slate-700 mb-2 text-xs uppercase tracking-wider">Progression</h5>
+                    <p class="text-sm text-slate-600 leading-relaxed">Introduces genuine asset backing—financier must own the leased asset. However, returns remain fixed, limiting risk-sharing.</p>
+                </div>
+                <div class="lang-block zh">
+                    <h5 class="font-bold text-slate-700 mb-2 text-xs uppercase tracking-wider">进步性</h5>
+                    <p class="text-sm text-slate-600 leading-relaxed">引入真正的资产支持——融资方必须拥有租赁资产。然而回报仍固定，限制了风险分担。</p>
+                </div>
+            </div>
+        `
+    },
+    sukuk: {
+        color: '#1e40af',
+        title: 'Sukuk · 伊斯兰债券',
+        subtitle: 'Islamic Bonds · 伊斯兰债券',
+        content: `
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="lang-block en">
+                    <h5 class="font-bold text-slate-700 mb-2 text-xs uppercase tracking-wider">Definition</h5>
+                    <p class="text-sm text-slate-600 leading-relaxed">Investment certificates representing proportionate ownership in underlying asset pool, generating returns from asset cash flows rather than interest.</p>
+                </div>
+                <div class="lang-block zh">
+                    <h5 class="font-bold text-slate-700 mb-2 text-xs uppercase tracking-wider">定义</h5>
+                    <p class="text-sm text-slate-600 leading-relaxed">代表标的资产池比例所有权的投资凭证，收益来自资产现金流而非利息。</p>
+                </div>
+                <div class="lang-block en">
+                    <h5 class="font-bold text-slate-700 mb-2 text-xs uppercase tracking-wider">Hybrid Nature</h5>
+                    <p class="text-sm text-slate-600 leading-relaxed">Occupies middle ground—more substance-compliant than pure debt, yet often structured with purchase undertakings replicating conventional bond economics.</p>
+                </div>
+                <div class="lang-block zh">
+                    <h5 class="font-bold text-slate-700 mb-2 text-xs uppercase tracking-wider">混合本质</h5>
+                    <p class="text-sm text-slate-600 leading-relaxed">占据中间地带——比纯债务更符合实质，但常以购买承诺构建，复制传统债券经济特征。</p>
+                </div>
+            </div>
+        `
+    },
+    mudaraba: {
+        color: '#059669',
+        title: 'Mudaraba / Musharaka · 利润分享/股权合伙',
+        subtitle: 'Profit-Loss Sharing · 盈亏共享',
+        content: `
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="lang-block en">
+                    <h5 class="font-bold text-slate-700 mb-2 text-xs uppercase tracking-wider">Mudaraba</h5>
+                    <p class="text-sm text-slate-600 leading-relaxed">Partnership where one party provides capital and another provides expertise. Profits shared by pre-agreed ratio; losses borne by capital provider unless negligence proven.</p>
+                </div>
+                <div class="lang-block zh">
+                    <h5 class="font-bold text-slate-700 mb-2 text-xs uppercase tracking-wider">信托融资</h5>
+                    <p class="text-sm text-slate-600 leading-relaxed">一方提供资金，另一方提供专业知识。利润按比例分享；损失由资金提供方承担，除非证明存在过失。</p>
+                </div>
+                <div class="lang-block en">
+                    <h5 class="font-bold text-slate-700 mb-2 text-xs uppercase tracking-wider">Substantive Compliance</h5>
+                    <p class="text-sm text-slate-600 leading-relaxed">Embody ideal-typical Islamic finance: authentic risk-sharing, profit-loss sharing, direct asset participation, conformity with Maqasid al-Shariah.</p>
+                </div>
+                <div class="lang-block zh">
+                    <h5 class="font-bold text-slate-700 mb-2 text-xs uppercase tracking-wider">实质性合规</h5>
+                    <p class="text-sm text-slate-600 leading-relaxed">体现理想型伊斯兰金融：真正的风险分担、盈亏分享、直接资产参与、符合教法更高目标。</p>
+                </div>
+            </div>
+        `
+    }
+};
+
+// 显示工具详情
+function showInstrumentDetail(id) {
+    const data = spectrumData[id];
+    const panel = document.getElementById('spectrum-detail-panel');
+    
+    document.getElementById('spectrumDetailTitle').textContent = data.title;
+    document.getElementById('spectrumDetailTitle').style.color = data.color;
+    document.getElementById('spectrumDetailSubtitle').textContent = data.subtitle;
+    document.getElementById('spectrumDetailBody').innerHTML = data.content;
+    
+    panel.classList.add('active');
+    
+    // 标记活跃卡片
+    document.querySelectorAll('.instrument-card-spectrum').forEach(c => c.classList.remove('active'));
+    document.querySelector(`.instrument-card-spectrum[onclick="showInstrumentDetail('${id}')"]`).classList.add('active');
+}
+
+// 关闭工具详情
+function closeInstrumentDetail(event) {
+    if (!event || event.target.id === 'spectrum-detail-panel' || event.target.closest('button')) {
+        document.getElementById('spectrum-detail-panel').classList.remove('active');
+        document.querySelectorAll('.instrument-card-spectrum').forEach(c => c.classList.remove('active'));
+    }
+}
+
+// 时间线高亮
+function highlightStep(step) {
+    document.querySelectorAll('.timeline-node-spectrum').forEach((node, index) => {
+        if (index === step) {
+            node.classList.add('active');
+        } else {
+            node.classList.remove('active');
+        }
+    });
+}
+
+// 自动轮播时间线
+let timelineInterval;
+function startTimelineAnimation() {
+    clearInterval(timelineInterval);
+    let currentStep = 0;
+    highlightStep(0);
+    timelineInterval = setInterval(() => {
+        currentStep = (currentStep + 1) % 4;
+        highlightStep(currentStep);
+    }, 2000);
+}
+
+// ESC键支持谱系模态框
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        const spectrumDetail = document.getElementById('spectrum-detail-panel');
+        const spectrumModal = document.getElementById('modal02-spectrum');
+        
+        if (spectrumDetail.classList.contains('active')) {
+            spectrumDetail.classList.remove('active');
+        } else if (spectrumModal.classList.contains('active')) {
+            spectrumModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
+});
     </script>
 
 </body>
