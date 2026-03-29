@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 04 - Evolutionary Foundation | 第四章 演化基础分析</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .serif-sc {
+            font-family: 'Noto Serif SC', serif;
+        }
+        
+        /* Three Panel Layout */
+        .three-panel-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.4fr 1fr;
+            gap: 1.5rem;
+            height: 100%;
+            padding: 1.5rem;
+        }
+        
+        .panel-card {
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            height: 100%;
+        }
+        
+        .panel-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid #e2e8f0;
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            flex-shrink: 0;
+        }
+        
+        .panel-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.25rem;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0,0,0,0.15) transparent;
+        }
+        
+        .panel-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        .panel-content::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.03);
+            border-radius: 3px;
+        }
+        .panel-content::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.15);
+            border-radius: 3px;
+        }
+        .panel-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(0,0,0,0.25);
+        }
+
+        /* Blue theme for Chapter 04 (Non-Core Chapter) */
+        .border-t-blue { border-top-color: #2563eb; }
+        .bg-blue-50 { background-color: #eff6ff; }
+        .border-blue-200 { border-color: #bfdbfe; }
+        .text-blue-900 { color: #1e3a8a; }
+        .text-blue-800 { color: #1e40af; }
+        .text-blue-700 { color: #1d4ed8; }
+        
+        /* Content Styling */
+        .bilingual-item {
+            margin-bottom: 0.75rem;
+        }
+        .bilingual-en {
+            display: block;
+            font-size: 0.75rem;
+            line-height: 1.4;
+            color: #475569;
+        }
+        .bilingual-cn {
+            display: block;
+            font-size: 0.7rem;
+            line-height: 1.4;
+            color: #64748b;
+            font-family: 'Noto Serif SC', serif;
+            margin-top: 0.15rem;
+        }
+        
+        /* Timeline styles */
+        .timeline-item {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        .timeline-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 2rem;
+            top: 2rem;
+            bottom: -1rem;
+            width: 2px;
+            background: #e2e8f0;
+        }
+        .timeline-year {
+            flex-shrink: 0;
+            width: 3rem;
+            text-align: center;
+            font-weight: 700;
+            color: #1e40af;
+            font-size: 0.75rem;
+            background: #dbeafe;
+            padding: 0.25rem;
+            border-radius: 0.375rem;
+            height: fit-content;
+        }
+        .timeline-content {
+            flex: 1;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+        }
+        
+        /* Pillar cards */
+        .pillar-card {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border-left: 3px solid;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .pillar-card.blue { border-left-color: #3b82f6; background: #eff6ff; }
+        .pillar-card.green { border-left-color: #22c55e; background: #f0fdf4; }
+        .pillar-card.amber { border-left-color: #f59e0b; background: #fffbeb; }
+        .pillar-card.purple { border-left-color: #a855f7; background: #faf5ff; }
+        
+        .pillar-title {
+            font-weight: 700;
+            font-size: 0.7rem;
+            margin-bottom: 0.25rem;
+            color: #1e293b;
+        }
+        
+        /* Role cards */
+        .role-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .role-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, #3b82f6, #1d4ed8);
+        }
+        .role-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.25rem;
+            height: 1.25rem;
+            background: #3b82f6;
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 700;
+            border-radius: 9999px;
+            margin-right: 0.5rem;
+        }
+        
+        /* Advantage item */
+        .advantage-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.375rem;
+            margin-bottom: 0.5rem;
+        }
+        .advantage-bullet {
+            width: 1.5rem;
+            height: 1.5rem;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.375rem;
+            font-size: 0.65rem;
+            flex-shrink: 0;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .three-panel-grid {
+                grid-template-columns: 1fr;
+                height: auto;
+                overflow-y: auto;
+            }
+            .panel-card {
+                height: auto;
+                max-height: none;
+            }
+            .panel-content {
+                max-height: 600px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .three-panel-grid {
+                padding: 1rem;
+                gap: 1rem;
+            }
+            .timeline-year {
+                width: 2.5rem;
+                font-size: 0.65rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Three Panel Layout -->
+    <div class="three-panel-grid">
+        
+        <!-- Left Panel: Historical Evolution -->
+        <div class="panel-card border-t-4 border-t-blue">
+            <div class="panel-header">
+                <h3 class="text-lg font-bold text-slate-800">Historical Evolution | 历史演化</h3>
+            </div>
+            <div class="panel-content space-y-4">
+                <div class="bg-blue-50 rounded-lg p-3 border border-blue-200">
+                    <h4 class="font-bold text-blue-900 text-xs mb-3">Timeline (1983-2024) | 发展时间线</h4>
+                    
+                    <div class="timeline-item">
+                        <span class="timeline-year">1983</span>
+                        <div class="timeline-content">
+                            <div class="bilingual-en font-medium text-slate-800 text-xs">Bank Islam Malaysia established - First Islamic bank</div>
+                            <div class="bilingual-cn text-xs">马来西亚伊斯兰银行成立 - 首家伊斯兰银行</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <span class="timeline-year">1997-98</span>
+                        <div class="timeline-content">
+                            <div class="bilingual-en font-medium text-slate-800 text-xs">Asian Financial Crisis - Reinforced Islamic finance commitment</div>
+                            <div class="bilingual-cn text-xs">亚洲金融危机 - 强化伊斯兰金融发展承诺</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <span class="timeline-year">2006</span>
+                        <div class="timeline-content">
+                            <div class="bilingual-en font-medium text-slate-800 text-xs">MIFC Initiative launched - International positioning strategy</div>
+                            <div class="bilingual-cn text-xs">MIFC倡议启动 - 确立国际金融中心战略定位</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <span class="timeline-year">2013</span>
+                        <div class="timeline-content">
+                            <div class="bilingual-en font-medium text-slate-800 text-xs">BRI launched - New cross-border cooperation opportunities</div>
+                            <div class="bilingual-cn text-xs">一带一路启动 - 新跨境合作机遇</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <span class="timeline-year">2017</span>
+                        <div class="timeline-content">
+                            <div class="bilingual-en font-medium text-slate-800 text-xs">World's first Green Sukuk issued by Malaysia</div>
+                            <div class="bilingual-cn text-xs">马来西亚发行全球首支绿色伊斯兰债券</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <span class="timeline-year">2024</span>
+                        <div class="timeline-content">
+                            <div class="bilingual-en font-medium text-slate-800 text-xs">ECRL SDG Sukuk - First government-guaranteed SDG Sukuk</div>
+                            <div class="bilingual-cn text-xs">ECRL SDG Sukuk - 首个政府担保SDG伊斯兰债券</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg p-3 border border-slate-200">
+                    <h4 class="font-bold text-slate-800 text-xs mb-2">Developmental State | 发展型国家视角</h4>
+                    <div class="bilingual-item">
+                        <span class="bilingual-en">State-led industrial policy approach (Lai, 2015) - Government actively intervenes to promote strategic industry development</span>
+                        <span class="bilingual-cn">国家主导的产业发展政策 - 政府积极干预推动战略性产业发展</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Center Panel: Institutional Ecosystem -->
+        <div class="panel-card border-t-4 border-t-blue">
+            <div class="panel-header">
+                <h3 class="text-lg font-bold text-slate-800">Institutional Ecosystem | 制度生态系统</h3>
+            </div>
+            <div class="panel-content space-y-4">
+                <div class="bg-white border border-slate-200 rounded-lg p-3">
+                    <h4 class="font-bold text-slate-800 text-xs mb-3">Four Pillars | 四大支柱</h4>
+                    
+                    <div class="pillar-card blue">
+                        <div class="pillar-title">1. Regulatory Infrastructure | 监管基础设施</div>
+                        <div class="bilingual-en text-xs">BNM, SC, SAC (Shariah Advisory Council)</div>
+                        <div class="bilingual-cn text-xs">国家银行、证券委员会、伊斯兰教法咨询委员会</div>
+                    </div>
+                    
+                    <div class="pillar-card green">
+                        <div class="pillar-title">2. Human Capital | 人力资本</div>
+                        <div class="bilingual-en text-xs">INCEIF, university programs, professional certification</div>
+                        <div class="bilingual-cn text-xs">国际伊斯兰金融教育中心、大学专业课程、专业认证</div>
+                    </div>
+                    
+                    <div class="pillar-card amber">
+                        <div class="pillar-title">3. Market Infrastructure | 市场基础设施</div>
+                        <div class="bilingual-en text-xs">Sukuk issuance platforms, trading systems, clearing & settlement</div>
+                        <div class="bilingual-cn text-xs">伊斯兰债券发行平台、交易系统、清算结算</div>
+                    </div>
+                    
+                    <div class="pillar-card purple">
+                        <div class="pillar-title">4. Supporting Services | 配套服务</div>
+                        <div class="bilingual-en text-xs">Law firms, accounting, rating agencies, Shariah advisory</div>
+                        <div class="bilingual-cn text-xs">律师事务所、会计、评级机构、教法咨询</div>
+                    </div>
+                </div>
+
+                <div class="bg-amber-50 rounded-lg p-3 border border-amber-200">
+                    <h4 class="font-bold text-amber-900 text-xs mb-2">Path Dependence | 路径依赖</h4>
+                    <div class="bilingual-item">
+                        <span class="bilingual-en">Embedded in NEP (New Economic Policy) and Bumiputera economic empowerment, creating political legitimacy (Rethel, 2021)</span>
+                        <span class="bilingual-cn">嵌入新经济政策与土著经济政策，创造政治合法性与制度连续性</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel: Global Positioning -->
+        <div class="panel-card border-t-4 border-t-blue">
+            <div class="panel-header">
+                <h3 class="text-lg font-bold text-slate-800">Global Positioning | 全球定位</h3>
+            </div>
+            <div class="panel-content space-y-4">
+                <div class="bg-gradient-to-br from-blue-50 to-white border border-blue-200 rounded-lg p-3">
+                    <h4 class="font-bold text-blue-900 text-xs mb-3">"Frontier" Position (Poon et al., 2016) | "前沿"定位</h4>
+                    
+                    <div class="role-card">
+                        <div class="flex items-center mb-1">
+                            <span class="role-number">1</span>
+                            <span class="font-bold text-slate-800 text-xs">Between Conventions & Principles</span>
+                        </div>
+                        <div class="bilingual-en text-xs">Between Western financial conventions and Islamic principles</div>
+                        <div class="bilingual-cn text-xs">中介功能1：在西方金融惯例与伊斯兰原则之间</div>
+                    </div>
+                    
+                    <div class="role-card">
+                        <div class="flex items-center mb-1">
+                            <span class="role-number">2</span>
+                            <span class="font-bold text-slate-800 text-xs">Between Traditions</span>
+                        </div>
+                        <div class="bilingual-en text-xs">Between different Shariah interpretive traditions</div>
+                        <div class="bilingual-cn text-xs">中介功能2：在不同伊斯兰教法解释传统之间</div>
+                    </div>
+                    
+                    <div class="role-card">
+                        <div class="flex items-center mb-1">
+                            <span class="role-number">3</span>
+                            <span class="font-bold text-slate-800 text-xs">Between Capital & Projects</span>
+                        </div>
+                        <div class="bilingual-en text-xs">Between Middle Eastern capital and Asian investment opportunities</div>
+                        <div class="bilingual-cn text-xs">中介功能3：在中东资本与亚洲投资机会之间</div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg p-3 border border-slate-200">
+                    <h4 class="font-bold text-slate-800 text-xs mb-2">Competitive Advantages | 竞争优势</h4>
+                    
+                    <div class="advantage-item">
+                        <div class="advantage-bullet">%</div>
+                        <div>
+                            <div class="bilingual-en font-medium text-xs">Market Share: 60%+ global Sukuk issuance</div>
+                            <div class="bilingual-cn text-xs">市场份额：占全球伊斯兰债券发行60%以上</div>
+                        </div>
+                    </div>
+                    
+                    <div class="advantage-item">
+                        <div class="advantage-bullet">深</div>
+                        <div>
+                            <div class="bilingual-en font-medium text-xs">Institutional Depth: 30% of banking assets (Islamic)</div>
+                            <div class="bilingual-cn text-xs">制度深度：伊斯兰银行资产占银行业30%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="advantage-item">
+                        <div class="advantage-bullet">新</div>
+                        <div>
+                            <div class="bilingual-en font-medium text-xs">Innovation: Green Sukuk, SDG Sukuk pioneer</div>
+                            <div class="bilingual-cn text-xs">产品创新：绿色债券、SDG债券先驱</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
