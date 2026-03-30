@@ -187,29 +187,126 @@
             -webkit-text-fill-color: transparent;
         }
         
-        /* Responsive Design */
-        @media (max-width: 1024px) {
-            .three-panel-grid {
-                grid-template-columns: 1fr;
-                height: auto;
-                overflow-y: auto;
+        /* ============================================
+           RESPONSIVE DESIGN - Mobile & Desktop
+           ============================================ */
+
+        /* Desktop First: Default styles above apply for desktop (3-column grid) */
+
+        /* Mobile Override: Force vertical stack and remove all constraints */
+        @media screen and (max-width: 1024px) {
+            html, body {
+                height: auto !important;
+                min-height: 100vh !important;
+                max-height: none !important;
+                overflow: visible !important;
+                overflow-x: hidden !important;
+                position: static !important;
             }
+
+            .three-panel-grid {
+                display: block !important;
+                width: 100% !important;
+                height: auto !important;
+                min-height: auto !important;
+                max-height: none !important;
+                overflow: visible !important;
+                padding: 10px !important;
+                gap: 0 !important;
+                grid-template-columns: none !important;
+            }
+
             .panel-card {
-                height: auto;
-                max-height: none;
+                display: block !important;
+                width: 100% !important;
+                height: auto !important;
+                min-height: auto !important;
+                max-height: none !important;
+                overflow: visible !important;
+                margin-bottom: 15px !important;
+                border-radius: 8px !important;
+                position: relative !important;
+                flex: none !important;
             }
+
+            .panel-card:last-child {
+                margin-bottom: 30px !important;
+            }
+
+            .panel-header {
+                position: relative !important;
+                height: auto !important;
+                flex-shrink: 0 !important;
+            }
+
             .panel-content {
-                max-height: 600px;
+                display: block !important;
+                height: auto !important;
+                min-height: auto !important;
+                max-height: none !important;
+                overflow: visible !important;
+                padding: 15px !important;
+                flex: none !important;
+            }
+
+            .frontier-entry-card {
+                cursor: pointer !important;
+            }
+
+            .timeline-item {
+                padding-left: 1.25rem;
+            }
+
+            .stat-card {
+                padding: 0.75rem;
+            }
+
+            .stat-number {
+                font-size: 1.25rem;
             }
         }
-        
-        @media (max-width: 768px) {
+
+        @media screen and (max-width: 480px) {
             .three-panel-grid {
-                padding: 1rem;
-                gap: 1rem;
+                padding: 8px !important;
             }
+
+            .panel-card {
+                margin-bottom: 12px !important;
+            }
+
+            .panel-header h3 {
+                font-size: 1rem !important;
+            }
+
+            .bilingual-en {
+                font-size: 0.85rem !important;
+            }
+
+            .bilingual-cn {
+                font-size: 0.8rem !important;
+            }
+        }</style>
+
+    <!-- Mobile Detection and Fix -->
+    <script>
+    (function() {
+        var isMobile = window.innerWidth <= 1024 || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        if (isMobile) {
+            var style = document.createElement('style');
+            style.innerHTML = [
+                'html,body{height:auto!important;min-height:100vh!important;overflow:visible!important;overflow-x:hidden!important}',
+                '.three-panel-grid{display:block!important;height:auto!important;overflow:visible!important;padding:10px!important}',
+                '.panel-card{display:block!important;width:100%!important;height:auto!important;margin-bottom:15px!important;overflow:visible!important}',
+                '.panel-content{height:auto!important;overflow:visible!important}',
+                '.panel-header{position:relative!important}'
+            ].join('');
+            document.head.appendChild(style);
         }
-    </style>
+    })();
+    </script>
+
+<base target="_blank">
 </head>
 <body>
 
@@ -301,7 +398,7 @@
                         </div>
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center gap-2 mb-1">
-                                <h4 class="font-bold text-amber-100 text-base">View Evolution Timeline</h4>
+                                <h4 class="font-bold text-amber-100 text-xs">View Evolution Timeline</h4>
                                 <span class="px-1.5 py-0.5 bg-amber-500/30 border border-amber-400/50 rounded text-[9px] text-amber-100">L3</span>
                             </div>
                             <p class="text-emerald-100 text-xs leading-relaxed">
@@ -373,7 +470,7 @@
                         </div>
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center gap-2 mb-1">
-                                <h4 class="font-bold text-amber-100 text-base">View Institutional Ecosystem</h4>
+                                <h4 class="font-bold text-amber-100 text-xs">View Institutional Ecosystem</h4>
                                 <span class="px-1.5 py-0.5 bg-amber-500/30 border border-amber-400/50 rounded text-[9px] text-amber-100">L3</span>
                             </div>
                             <p class="text-emerald-100 text-xs leading-relaxed">
@@ -429,7 +526,7 @@
                         </div>
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center gap-2 mb-1">
-                                <h4 class="font-bold text-amber-100 text-base">View Frontier Position Analysis</h4>
+                                <h4 class="font-bold text-amber-100 text-xs">View Frontier Position Analysis</h4>
                                 <span class="px-1.5 py-0.5 bg-amber-500/30 border border-amber-400/50 rounded text-[9px] text-amber-100">L3</span>
                             </div>
                             <p class="text-emerald-100 text-xs leading-relaxed">
