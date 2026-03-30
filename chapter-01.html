@@ -600,5 +600,31 @@
         <span>Swipe to view more | 左右滑动查看更多</span>
     </div>
 
+    <!-- Scroll Progress Indicator -->
+    <div class="scroll-progress">
+        <div class="progress-dot active" data-index="0"></div>
+        <div class="progress-dot" data-index="1"></div>
+        <div class="progress-dot" data-index="2"></div>
+    </div>
+
+    <script>
+        // Update progress indicator on scroll
+        const grid = document.querySelector('.three-panel-grid');
+        const dots = document.querySelectorAll('.progress-dot');
+        const cards = document.querySelectorAll('.panel-card');
+
+        if (grid && dots.length > 0) {
+            grid.addEventListener('scroll', () => {
+                const scrollLeft = grid.scrollLeft;
+                const cardWidth = cards[0].offsetWidth + 16; // including gap
+                const index = Math.round(scrollLeft / cardWidth);
+
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === index);
+                });
+            });
+        }
+    </script>
+
 </body>
 </html>
