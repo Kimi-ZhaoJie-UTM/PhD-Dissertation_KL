@@ -5,4 +5,5 @@ The Internationalization Pathway of Kuala Lumpur's Financial Hub
 <!-- 页脚显示 -->
 <footer>
   <p>© 2026 [赵杰]. 未经许可，禁止复制、转载或用于商业用途。</p>
+  <p>© 2026 [Zhao Jie]. Reproduction, copying, or use for commercial purposes is strictly prohibited without permission.</p>
 </footer>
