@@ -92,6 +92,9 @@
             color: #94a3b8;
             font-size: 13px;
         }
+        .gate-divider.en::before {
+            content: "OR";
+        }
         .gate-apply {
             display: inline-flex;
             align-items: center;
@@ -120,6 +123,83 @@
             font-size: 13px;
             margin-top: 8px;
             display: none;
+        }
+        .lang-switch {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            display: flex;
+            gap: 8px;
+        }
+        .lang-btn {
+            padding: 4px 12px;
+            border: 1px solid #e2e8f0;
+            background: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            color: #64748b;
+            transition: all 0.3s;
+        }
+        .lang-btn.active {
+            background: #1e3a8a;
+            color: #fff;
+            border-color: #1e3a8a;
+        }
+
+        /* ========== 隐藏管理面板 ========== */
+        #admin-panel {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            padding: 32px;
+            border-radius: 12px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            z-index: 100000;
+            max-width: 360px;
+            width: 90%;
+        }
+        #admin-panel h3 {
+            margin: 0 0 20px 0;
+            color: #1e3a8a;
+            font-size: 18px;
+        }
+        #admin-panel input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        #admin-panel button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 12px;
+            background: #1e3a8a;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        #admin-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 99999;
+        }
+        .admin-trigger {
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .admin-trigger:hover {
+            opacity: 0.7;
         }
 
         /* ========== 原有样式保留 ========== */
@@ -237,28 +317,44 @@
     <!-- ========== 密码门（body 第一行） ========== -->
     <div id="gate">
         <div id="gate-box">
-            <h2>论文开题汇报</h2>
-            <p class="subtitle">
+            <!-- 语言切换 -->
+            <div class="lang-switch">
+                <button class="lang-btn active" onclick="setLang('zh')" id="btn-zh">中文</button>
+                <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+            </div>
+            
+            <h2 id="gate-title">论文开题汇报</h2>
+            <p class="subtitle" id="gate-subtitle">
                 吉隆坡金融中心的国际化路径研究<br>
                 <span style="color:#94a3b8;font-size:12px;">私密学术材料，需授权访问</span>
             </p>
             
             <!-- 密码输入 -->
             <input type="password" id="pwd" placeholder="输入授权密码" onkeydown="if(event.key==='Enter')check()">
-            <button onclick="check()">进入系统</button>
+            <button onclick="check()" id="gate-btn">进入系统</button>
             <p class="gate-error" id="error-msg">密码错误，请检查或提交申请</p>
             
-            <div class="gate-divider"></div>
+            <div class="gate-divider" id="gate-divider"></div>
             
             <!-- 申请入口 -->
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSc6ufXiJEl5nYM0sjVnrEgtOhK2NMHOadwnSDZd5o5yr8t49Q/viewform?usp=header" target="_blank" class="gate-apply">
-                <span>📩</span> 申请查看权限
+            <a href="https://forms.gle/你的Google表单链接" target="_blank" class="gate-apply" id="gate-apply">
+                <span>📩</span> <span id="apply-text">申请查看权限</span>
             </a>
-            <p class="gate-hint">
+            <p class="gate-hint" id="gate-hint">
                 提交申请后，密码将发送至您的邮箱<br>
                 审核通常需要 1-24 小时
             </p>
         </div>
+    </div>
+
+    <!-- 隐藏管理面板 -->
+    <div id="admin-overlay" onclick="closeAdmin()"></div>
+    <div id="admin-panel">
+        <h3 id="admin-title">🔧 修改访问密码</h3>
+        <input type="password" id="admin-pwd" placeholder="管理密码" onkeydown="if(event.key==='Enter')verifyAdmin()">
+        <input type="password" id="new-pwd" placeholder="新访问密码" style="display:none;" onkeydown="if(event.key==='Enter')saveNewPwd()">
+        <button onclick="verifyAdmin()" id="admin-btn">验证管理密码</button>
+        <p id="admin-msg" style="color:#dc2626;font-size:13px;margin-top:8px;"></p>
     </div>
 
     <!-- Background Decorations -->
@@ -597,8 +693,9 @@
         <div class="bg-slate-900 text-white px-6 py-5 border-t border-slate-700">
             <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
                 <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 md:gap-8">
-                    <div class="text-center md:text-left">
-                        <span class="text-slate-400 text-xs uppercase tracking-wider block mb-0.5">Candidate | 答辩人</span>
+                    <!-- 隐藏管理入口：点击"Candidate | 答辩人"或名字区域触发 -->
+                    <div class="text-center md:text-left admin-trigger" onclick="handleAdminTrigger(event)">
+                        <span class="text-slate-400 text-xs uppercase tracking-wider block mb-0.5" id="footer-candidate">Candidate | 答辩人</span>
                         <p class="font-bold">Zhao Jie <span class="text-slate-400 font-normal text-xs serif-sc">赵杰</span></p>
                     </div>
                     <div class="hidden md:block w-px h-8 bg-slate-700"></div>
@@ -799,16 +896,95 @@
     </div>
 
     <script>
-        // ========== 密码门逻辑 ==========
-        // 混淆密码："kl2025" 的十六进制编码
-        const _0x4b = ["\x6b\x6c\x32\x30\x32\x35"];
+        // ========== 多语言配置 ==========
+        const i18n = {
+            zh: {
+                title: "论文开题汇报",
+                subtitle: "吉隆坡金融中心的国际化路径研究<br><span style='color:#94a3b8;font-size:12px;'>私密学术材料，需授权访问</span>",
+                placeholder: "输入授权密码",
+                btn: "进入系统",
+                error: "密码错误，请检查或提交申请",
+                divider: "或",
+                apply: "申请查看权限",
+                hint: "提交申请后，密码将发送至您的邮箱<br>审核通常需要 1-24 小时",
+                adminTitle: "🔧 修改访问密码",
+                adminPlaceholder: "管理密码",
+                newPwdPlaceholder: "新访问密码",
+                adminBtn: "验证管理密码",
+                adminBtnSave: "保存新密码",
+                adminError: "管理密码错误",
+                adminSuccess: "密码修改成功！新密码已生效",
+                candidate: "Candidate | 答辩人"
+            },
+            en: {
+                title: "Dissertation Proposal",
+                subtitle: "Internationalization of Kuala Lumpur Financial Hub<br><span style='color:#94a3b8;font-size:12px;'>Private academic material, authorization required</span>",
+                placeholder: "Enter access password",
+                btn: "Enter System",
+                error: "Incorrect password, please check or apply for access",
+                divider: "OR",
+                apply: "Request Access",
+                hint: "Password will be sent to your email after approval<br>Review usually takes 1-24 hours",
+                adminTitle: "🔧 Change Access Password",
+                adminPlaceholder: "Admin password",
+                newPwdPlaceholder: "New access password",
+                adminBtn: "Verify Admin Password",
+                adminBtnSave: "Save New Password",
+                adminError: "Incorrect admin password",
+                adminSuccess: "Password changed successfully! New password is now active",
+                candidate: "Candidate"
+            }
+        };
         
+        let currentLang = 'zh';
+        let accessPassword = "\x6b\x6c\x32\x30\x32\x35"; // "kl2025"
+        const adminPassword = "\x38\x38\x36\x36\x33\x31"; // "886631" 混淆存储
+        
+        // 检测浏览器语言并自动设置
+        function detectLanguage() {
+            const lang = navigator.language || navigator.userLanguage;
+            if (lang.startsWith('en')) {
+                setLang('en');
+            } else {
+                setLang('zh');
+            }
+        }
+        
+        // 设置语言
+        function setLang(lang) {
+            currentLang = lang;
+            const t = i18n[lang];
+            
+            // 更新按钮状态
+            document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
+            document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+            
+            // 更新文本
+            document.getElementById('gate-title').textContent = t.title;
+            document.getElementById('gate-subtitle').innerHTML = t.subtitle;
+            document.getElementById('pwd').placeholder = t.placeholder;
+            document.getElementById('gate-btn').textContent = t.btn;
+            document.getElementById('error-msg').textContent = t.error;
+            document.getElementById('gate-divider').classList.toggle('en', lang === 'en');
+            document.getElementById('apply-text').textContent = t.apply;
+            document.getElementById('gate-hint').innerHTML = t.hint;
+            
+            // 更新管理面板
+            document.getElementById('admin-title').textContent = t.adminTitle;
+            document.getElementById('admin-pwd').placeholder = t.adminPlaceholder;
+            document.getElementById('new-pwd').placeholder = t.newPwdPlaceholder;
+            document.getElementById('admin-btn').textContent = t.adminBtn;
+            
+            // 更新页脚
+            document.getElementById('footer-candidate').textContent = t.candidate;
+        }
+        
+        // ========== 密码门逻辑 ==========
         function check() {
             const input = document.getElementById('pwd').value;
             const errorMsg = document.getElementById('error-msg');
             
-            if (input === _0x4b[0]) {
-                // 密码正确，移除密码门
+            if (input === accessPassword) {
                 const gate = document.getElementById('gate');
                 gate.style.opacity = '0';
                 gate.style.transition = 'opacity 0.5s ease';
@@ -817,11 +993,86 @@
                 }, 500);
                 console.log("Authorized access at: " + new Date().toLocaleString());
             } else {
-                // 密码错误，显示错误信息
                 errorMsg.style.display = 'block';
                 document.getElementById('pwd').value = '';
                 document.getElementById('pwd').focus();
             }
+        }
+        
+        // ========== 隐藏管理入口 ==========
+        let clickCount = 0;
+        let lastClickTime = 0;
+        
+        function handleAdminTrigger(e) {
+            const currentTime = new Date().getTime();
+            
+            // 双击检测（300ms内两次点击）
+            if (currentTime - lastClickTime < 300) {
+                clickCount++;
+                if (clickCount >= 2) {
+                    openAdmin();
+                    clickCount = 0;
+                }
+            } else {
+                clickCount = 1;
+            }
+            lastClickTime = currentTime;
+        }
+        
+        function openAdmin() {
+            document.getElementById('admin-overlay').style.display = 'block';
+            document.getElementById('admin-panel').style.display = 'block';
+            document.getElementById('admin-pwd').value = '';
+            document.getElementById('new-pwd').value = '';
+            document.getElementById('new-pwd').style.display = 'none';
+            document.getElementById('admin-btn').textContent = i18n[currentLang].adminBtn;
+            document.getElementById('admin-btn').onclick = verifyAdmin;
+            document.getElementById('admin-msg').textContent = '';
+            document.getElementById('admin-pwd').focus();
+        }
+        
+        function closeAdmin() {
+            document.getElementById('admin-overlay').style.display = 'none';
+            document.getElementById('admin-panel').style.display = 'none';
+        }
+        
+        function verifyAdmin() {
+            const input = document.getElementById('admin-pwd').value;
+            const msg = document.getElementById('admin-msg');
+            
+            if (input === adminPassword) {
+                // 验证成功，显示新密码输入
+                document.getElementById('new-pwd').style.display = 'block';
+                document.getElementById('admin-btn').textContent = i18n[currentLang].adminBtnSave;
+                document.getElementById('admin-btn').onclick = saveNewPwd;
+                document.getElementById('new-pwd').focus();
+                msg.style.color = '#16a34a';
+                msg.textContent = '✓ Admin verified, enter new password';
+            } else {
+                msg.style.color = '#dc2626';
+                msg.textContent = i18n[currentLang].adminError;
+                document.getElementById('admin-pwd').value = '';
+            }
+        }
+        
+        function saveNewPwd() {
+            const newPwd = document.getElementById('new-pwd').value;
+            const msg = document.getElementById('admin-msg');
+            
+            if (newPwd.length < 4) {
+                msg.style.color = '#dc2626';
+                msg.textContent = 'Password must be at least 4 characters';
+                return;
+            }
+            
+            // 更新密码（混淆存储）
+            accessPassword = newPwd;
+            msg.style.color = '#16a34a';
+            msg.textContent = i18n[currentLang].adminSuccess + ': ' + newPwd;
+            
+            setTimeout(() => {
+                closeAdmin();
+            }, 2000);
         }
         
         // ========== 模态框逻辑（原有） ==========
@@ -849,6 +1100,12 @@
         
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
+                // 先关闭管理面板
+                if (document.getElementById('admin-panel').style.display === 'block') {
+                    closeAdmin();
+                    return;
+                }
+                // 再关闭模态框
                 const activeModal = document.querySelector('.glass-modal.active');
                 if (activeModal) {
                     activeModal.classList.remove('active');
@@ -856,6 +1113,9 @@
                 }
             }
         });
+        
+        // 页面加载时自动检测语言
+        window.onload = detectLanguage;
     </script>
 
 </body>
