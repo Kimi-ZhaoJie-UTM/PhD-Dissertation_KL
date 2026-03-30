@@ -6,26 +6,28 @@
     <title>Chapter 01 - Introduction | 第一章 绪论</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
+    <style>body {
             font-family: 'Inter', sans-serif;
             background: #f8fafc;
             height: 100vh;
             overflow: hidden;
+            margin: 0;
+            padding: 0;
         }
         .serif-sc {
             font-family: 'Noto Serif SC', serif;
         }
-        
-        /* Three Panel Layout - Critical for independent scrolling */
+
+        /* Three Panel Layout - Desktop */
         .three-panel-grid {
             display: grid;
             grid-template-columns: 1fr 1.4fr 1fr;
             gap: 1.5rem;
             height: 100%;
             padding: 1.5rem;
+            box-sizing: border-box;
         }
-        
+
         .panel-card {
             background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
             border: 1px solid #e2e8f0;
@@ -36,22 +38,23 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             height: 100%;
         }
-        
+
         .panel-header {
             padding: 1.25rem;
             border-bottom: 1px solid #e2e8f0;
             background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
             flex-shrink: 0;
         }
-        
+
         .panel-content {
             flex: 1;
             overflow-y: auto;
             padding: 1.25rem;
             scrollbar-width: thin;
             scrollbar-color: rgba(0,0,0,0.15) transparent;
+            -webkit-overflow-scrolling: touch;
         }
-        
+
         .panel-content::-webkit-scrollbar {
             width: 6px;
         }
@@ -76,7 +79,7 @@
         .text-blue-700 { color: #1d4ed8; }
         .bg-gradient-to-br { background-image: linear-gradient(to bottom right, var(--tw-gradient-stops)); }
         .from-blue-50 { --tw-gradient-from: #eff6ff; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(239, 246, 255, 0)); }
-        
+
         /* Content Styling */
         .bilingual-item {
             margin-bottom: 0.75rem;
@@ -95,7 +98,7 @@
             font-family: 'Noto Serif SC', serif;
             margin-top: 0.15rem;
         }
-        
+
         /* RO-RQ Matrix Table Styles */
         .correspondence-matrix {
             width: 100%;
@@ -123,7 +126,7 @@
         .correspondence-matrix tr:last-child td:first-child { border-radius: 0 0 0 0.5rem; }
         .correspondence-matrix tr:last-child td:last-child { border-radius: 0 0 0.5rem 0; }
         .correspondence-matrix tr:nth-child(even) { background: #f8fafc; }
-        
+
         .ro-cell { display: flex; flex-direction: column; gap: 0.15rem; }
         .ro-badge {
             background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
@@ -137,7 +140,7 @@
         }
         .ro-title { font-weight: 600; color: #1e3a8a; line-height: 1.3; font-size: 0.7rem; }
         .ro-cn { font-size: 0.65rem; color: #64748b; font-family: 'Noto Serif SC', serif; }
-        
+
         .rq-tags { display: flex; flex-wrap: wrap; gap: 0.25rem; }
         .rq-tag {
             background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
@@ -151,7 +154,7 @@
         }
         .reason-cell { color: #475569; line-height: 1.3; font-size: 0.65rem; }
         .reason-cell .cn { display: block; color: #64748b; font-size: 0.6rem; margin-top: 0.1rem; font-family: 'Noto Serif SC', serif; }
-        
+
         /* RQ Detail Section */
         .rq-detailed-section {
             background: linear-gradient(135deg, #fff7ed 0%, #ffffff 100%);
@@ -183,7 +186,7 @@
         .rq-number { font-weight: 700; color: #ea580c; margin-right: 0.25rem; }
         .rq-en { display: block; margin-bottom: 0.15rem; }
         .rq-cn { display: block; color: #78716c; font-size: 0.65rem; font-family: 'Noto Serif SC', serif; }
-        
+
         /* Significance Section */
         .significance-section { border-top: 1px solid #e2e8f0; padding-top: 0.75rem; margin-top: 0.5rem; }
         .significance-title {
@@ -235,37 +238,165 @@
         .significance-card.theory .significance-list li::before { background: #8b5cf6; }
         .significance-card.practice .significance-list li::before { background: #10b981; }
         .significance-list .cn { display: block; color: #64748b; font-size: 0.6rem; margin-top: 0.05rem; font-family: 'Noto Serif SC', serif; }
-        
-        /* Responsive Design */
-        @media (max-width: 1024px) {
+
+        /* Mobile Navigation */
+        .mobile-nav {
+            display: none;
+        }
+
+        .mobile-tabs {
+            display: none;
+        }
+
+        /* =========================================
+           MOBILE STYLES - Complete Rewrite
+           ========================================= */
+        @media screen and (max-width: 1024px) {
+            html, body {
+                height: 100%;
+                overflow: hidden;
+                position: fixed;
+                width: 100%;
+                touch-action: none;
+            }
+
             .three-panel-grid {
-                grid-template-columns: 1fr;
-                height: auto;
-                overflow-y: auto;
+                display: flex;
+                flex-direction: row;
+                width: 300%;
+                height: 100%;
+                padding: 0;
+                gap: 0;
+                overflow-x: scroll;
+                overflow-y: hidden;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+                scroll-behavior: smooth;
             }
+
             .panel-card {
-                height: auto;
-                max-height: none;
+                width: 33.333%;
+                height: calc(100% - 60px);
+                flex: none;
+                border-radius: 0;
+                border: none;
+                border-right: 1px solid #e2e8f0;
+                scroll-snap-align: start;
+                margin-top: 0;
             }
+
+            .panel-card:last-child {
+                border-right: none;
+            }
+
+            .panel-header {
+                padding: 1rem;
+                background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+                color: white;
+            }
+
+            .panel-header h3 {
+                font-size: 1rem;
+                color: white;
+            }
+
             .panel-content {
-                max-height: 600px;
+                padding: 1rem;
+                overflow-y: auto;
+                overflow-x: hidden;
+                height: calc(100% - 60px);
+                -webkit-overflow-scrolling: touch;
+                touch-action: pan-y;
             }
+
+            /* Mobile Tab Navigation */
+            .mobile-tabs {
+                display: flex;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 60px;
+                background: white;
+                border-top: 1px solid #e2e8f0;
+                z-index: 1000;
+                box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+            }
+
+            .mobile-tab {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 4px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                border: none;
+                background: none;
+                padding: 0;
+            }
+
+            .mobile-tab.active {
+                background: #eff6ff;
+            }
+
+            .mobile-tab.active .tab-icon {
+                color: #2563eb;
+            }
+
+            .mobile-tab.active .tab-label {
+                color: #2563eb;
+                font-weight: 600;
+            }
+
+            .tab-icon {
+                width: 20px;
+                height: 20px;
+                color: #64748b;
+            }
+
+            .tab-label {
+                font-size: 0.7rem;
+                color: #64748b;
+            }
+
+            /* Hide scrollbar but keep functionality */
+            .three-panel-grid::-webkit-scrollbar {
+                display: none;
+            }
+            .three-panel-grid {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+
             .significance-grid {
                 grid-template-columns: 1fr;
             }
         }
-        
-        @media (max-width: 768px) {
-            .three-panel-grid {
-                padding: 1rem;
-                gap: 1rem;
+
+        @media screen and (max-width: 480px) {
+            .panel-header h3 {
+                font-size: 0.9rem;
             }
+
+            .bilingual-en {
+                font-size: 0.8rem;
+            }
+
+            .bilingual-cn {
+                font-size: 0.75rem;
+            }
+
+            .correspondence-matrix {
+                font-size: 0.75rem;
+            }
+
             .correspondence-matrix th,
             .correspondence-matrix td {
-                padding: 0.4rem 0.2rem;
+                padding: 0.5rem 0.3rem;
             }
-        }
-    </style>
+        }</style>
 <base target="_blank">
 </head>
 <body>
@@ -592,35 +723,53 @@
 
     </div>
 
-    <!-- Mobile Scroll Hint -->
-    <div class="mobile-scroll-hint">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path>
-        </svg>
-        <span>Swipe to view more | 左右滑动查看更多</span>
-    </div>
-
-    <!-- Scroll Progress Indicator -->
-    <div class="scroll-progress">
-        <div class="progress-dot active" data-index="0"></div>
-        <div class="progress-dot" data-index="1"></div>
-        <div class="progress-dot" data-index="2"></div>
+    <!-- Mobile Bottom Navigation -->
+    <div class="mobile-tabs">
+        <button class="mobile-tab active" onclick="scrollToPanel(0)">
+            <svg class="tab-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+            </svg>
+            <span class="tab-label">背景与问题</span>
+        </button>
+        <button class="mobile-tab" onclick="scrollToPanel(1)">
+            <svg class="tab-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+            </svg>
+            <span class="tab-label">目标与意义</span>
+        </button>
+        <button class="mobile-tab" onclick="scrollToPanel(2)">
+            <svg class="tab-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+            </svg>
+            <span class="tab-label">核心概念</span>
+        </button>
     </div>
 
     <script>
-        // Update progress indicator on scroll
-        const grid = document.querySelector('.three-panel-grid');
-        const dots = document.querySelectorAll('.progress-dot');
-        const cards = document.querySelectorAll('.panel-card');
+        function scrollToPanel(index) {
+            const grid = document.querySelector('.three-panel-grid');
+            const cards = document.querySelectorAll('.panel-card');
+            const tabs = document.querySelectorAll('.mobile-tab');
 
-        if (grid && dots.length > 0) {
+            if (cards[index]) {
+                cards[index].scrollIntoView({ behavior: 'smooth', inline: 'start' });
+            }
+
+            tabs.forEach((tab, i) => {
+                tab.classList.toggle('active', i === index);
+            });
+        }
+
+        // Update active tab on scroll
+        const grid = document.querySelector('.three-panel-grid');
+        if (grid) {
             grid.addEventListener('scroll', () => {
                 const scrollLeft = grid.scrollLeft;
-                const cardWidth = cards[0].offsetWidth + 16; // including gap
-                const index = Math.round(scrollLeft / cardWidth);
+                const panelWidth = grid.offsetWidth;
+                const index = Math.round(scrollLeft / panelWidth);
 
-                dots.forEach((dot, i) => {
-                    dot.classList.toggle('active', i === index);
+                document.querySelectorAll('.mobile-tab').forEach((tab, i) => {
+                    tab.classList.toggle('active', i === index);
                 });
             });
         }
