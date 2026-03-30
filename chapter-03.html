@@ -96,7 +96,7 @@
             margin-top: 0.15rem;
         }
         
-        /* L3 Entry Card - Data Analysis Theme (Teal/Violet) */
+        /* L3 Entry Card - Base Styles */
         .l3-entry-card {
             position: relative;
             overflow: hidden;
@@ -148,6 +148,49 @@
             animation: shimmer-data 3s infinite;
         }
         @keyframes shimmer-data {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        /* Main Case Entry - Amber/Brown Gradient Theme */
+        .main-case-entry {
+            background: linear-gradient(135deg, #7c2d12 0%, #92400e 50%, #b45309 100%);
+            border-color: #fbbf24;
+            box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.4);
+        }
+        .main-case-entry:hover {
+            box-shadow: 0 20px 40px -5px rgba(245, 158, 11, 0.6);
+            border-color: #f59e0b;
+        }
+        .main-case-icon {
+            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+        }
+        .pulse-ring-amber {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid rgba(251, 191, 36, 0.3);
+            animation: pulse-ring-amber 2s infinite;
+        }
+        @keyframes pulse-ring-amber {
+            0% { transform: scale(0.8); opacity: 1; }
+            100% { transform: scale(1.3); opacity: 0; }
+        }
+        .shimmer-amber {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(251, 191, 36, 0.15), transparent);
+            transform: rotate(45deg);
+            animation: shimmer-amber 3s infinite;
+        }
+        @keyframes shimmer-amber {
             0% { transform: translateX(-100%) rotate(45deg); }
             100% { transform: translateX(100%) rotate(45deg); }
         }
@@ -319,6 +362,40 @@
                         <span class="bilingual-cn">东海岸铁路可持续发展目标伊斯兰债券：马来西亚首个政府担保SDG Sukuk，代表一带一路旗舰项目融资</span>
                     </div>
                 </div>
+
+                <!-- L3 Entry Point: Main Case ECRL SDG Sukuk -->
+                <div class="main-case-entry l3-entry-card rounded-xl p-4 relative overflow-hidden group mt-4" onclick="openNestedModal('chapter-03-main-case.html')">
+                    <div class="shimmer-amber"></div>
+                    <div class="flex items-start gap-4 relative z-10">
+                        <div class="main-case-icon w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 relative">
+                            <div class="pulse-ring-amber"></div>
+                            <svg class="w-8 h-8 text-white relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <h4 class="font-bold text-white text-base">View ECRL SDG Sukuk Structure</h4>
+                                <span class="px-2 py-0.5 bg-amber-500/30 border border-amber-400/50 rounded text-[10px] text-amber-100">L3</span>
+                            </div>
+                            <p class="text-amber-100 text-xs leading-relaxed mb-2">
+                                查看ECRL SDG Sukuk完整交易结构：政府担保机制、SPV架构、风险分担与项目融资流程可视化
+                            </p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2 py-0.5 bg-white/10 rounded text-[10px] text-amber-100 border border-amber-200/30">Transaction Structure</span>
+                                <span class="px-2 py-0.5 bg-white/10 rounded text-[10px] text-amber-100 border border-amber-200/30">Risk Allocation</span>
+                                <span class="px-2 py-0.5 bg-white/10 rounded text-[10px] text-amber-100 border border-amber-200/30">BRI Flagship</span>
+                            </div>
+                        </div>
+                        <div class="flex-shrink-0 self-center">
+                            <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/20 group-hover:bg-white/20 transition-all">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6l6 6-6 6"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -450,7 +527,7 @@
             // Create iframe
             const iframe = document.createElement('iframe');
             iframe.src = url;
-            iframe.title = 'Four-Stage Data Analysis Framework';
+            iframe.title = 'Chapter 03 Detail View';
             iframe.className = 'w-full h-full';
             iframe.allow = 'fullscreen';
             
