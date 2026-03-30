@@ -201,6 +201,19 @@
         .admin-trigger:hover {
             opacity: 0.7;
         }
+        .debug-info {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.8);
+            color: #0f0;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: monospace;
+            z-index: 99998;
+            display: none;
+        }
 
         /* ========== 原有样式保留 ========== */
         body { font-family: 'Inter', sans-serif; }
@@ -314,6 +327,13 @@
 </head>
 <body class="gradient-bg min-h-screen p-4 md:p-8 relative">
 
+    <!-- 调试信息面板（按 Ctrl+Shift+D 显示） -->
+    <div class="debug-info" id="debug-panel">
+        <div>Version: 2.1</div>
+        <div id="debug-pwd">Password: loading...</div>
+        <div id="debug-storage">Storage: checking...</div>
+    </div>
+
     <!-- ========== 密码门（body 第一行） ========== -->
     <div id="gate">
         <div id="gate-box">
@@ -337,7 +357,7 @@
             <div class="gate-divider" id="gate-divider"></div>
             
             <!-- 申请入口 -->
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSc6ufXiJEl5nYM0sjVnrEgtOhK2NMHOadwnSDZd5o5yr8t49Q/viewform?usp=header" target="_blank" class="gate-apply" id="gate-apply">
+            <a href="https://forms.gle/你的Google表单链接" target="_blank" class="gate-apply" id="gate-apply">
                 <span>📩</span> <span id="apply-text">申请查看权限</span>
             </a>
             <p class="gate-hint" id="gate-hint">
@@ -937,10 +957,20 @@
         };
         
         let currentLang = 'zh';
-        let accessPassword = "\x6b\x6c\x32\x30\x32\x35"; // "kl2025"
-        const adminPassword = "\x38\x38\x36\x36\x33\x31"; // "886631" 混淆存储
+        const STORAGE_KEY = 'dissertation_pwd_v2';
+        const DEFAULT_PASSWORD = 'kl2025';
+        const ADMIN_PASSWORD = '886631';
         
-        // 检测浏览器语言并自动设置
+        // 初始化：从 localStorage 读取或设置默认值
+        let accessPassword = localStorage.getItem(STORAGE_KEY) || DEFAULT_PASSWORD;
+        
+        // 调试：更新调试面板
+        function updateDebugInfo() {
+            document.getElementById('debug-pwd').textContent = 'Password: ' + accessPassword;
+            document.getElementById('debug-storage').textContent = 'Storage: ' + (localStorage.getItem(STORAGE_KEY) ? 'saved' : 'default');
+        }
+        
+        // 检测浏览器语言
         function detectLanguage() {
             const lang = navigator.language || navigator.userLanguage;
             if (lang.startsWith('en')) {
@@ -948,6 +978,7 @@
             } else {
                 setLang('zh');
             }
+            updateDebugInfo();
         }
         
         // 设置语言
@@ -955,11 +986,9 @@
             currentLang = lang;
             const t = i18n[lang];
             
-            // 更新按钮状态
             document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
             document.getElementById('btn-en').classList.toggle('active', lang === 'en');
             
-            // 更新文本
             document.getElementById('gate-title').textContent = t.title;
             document.getElementById('gate-subtitle').innerHTML = t.subtitle;
             document.getElementById('pwd').placeholder = t.placeholder;
@@ -969,20 +998,23 @@
             document.getElementById('apply-text').textContent = t.apply;
             document.getElementById('gate-hint').innerHTML = t.hint;
             
-            // 更新管理面板
             document.getElementById('admin-title').textContent = t.adminTitle;
             document.getElementById('admin-pwd').placeholder = t.adminPlaceholder;
             document.getElementById('new-pwd').placeholder = t.newPwdPlaceholder;
             document.getElementById('admin-btn').textContent = t.adminBtn;
             
-            // 更新页脚
             document.getElementById('footer-candidate').textContent = t.candidate;
         }
         
-        // ========== 密码门逻辑 ==========
+        // ========== 密码门逻辑（修复版） ==========
         function check() {
             const input = document.getElementById('pwd').value;
             const errorMsg = document.getElementById('error-msg');
+            
+            // 调试输出
+            console.log('Input password:', input);
+            console.log('Expected password:', accessPassword);
+            console.log('Match:', input === accessPassword);
             
             if (input === accessPassword) {
                 const gate = document.getElementById('gate');
@@ -991,11 +1023,12 @@
                 setTimeout(() => {
                     gate.remove();
                 }, 500);
-                console.log("Authorized access at: " + new Date().toLocaleString());
+                console.log("✓ Authorized access at: " + new Date().toLocaleString());
             } else {
                 errorMsg.style.display = 'block';
                 document.getElementById('pwd').value = '';
                 document.getElementById('pwd').focus();
+                console.log('✗ Password mismatch');
             }
         }
         
@@ -1006,7 +1039,6 @@
         function handleAdminTrigger(e) {
             const currentTime = new Date().getTime();
             
-            // 双击检测（300ms内两次点击）
             if (currentTime - lastClickTime < 300) {
                 clickCount++;
                 if (clickCount >= 2) {
@@ -1040,18 +1072,22 @@
             const input = document.getElementById('admin-pwd').value;
             const msg = document.getElementById('admin-msg');
             
-            if (input === adminPassword) {
-                // 验证成功，显示新密码输入
+            console.log('Admin input:', input);
+            console.log('Admin expected:', ADMIN_PASSWORD);
+            
+            if (input === ADMIN_PASSWORD) {
                 document.getElementById('new-pwd').style.display = 'block';
                 document.getElementById('admin-btn').textContent = i18n[currentLang].adminBtnSave;
                 document.getElementById('admin-btn').onclick = saveNewPwd;
                 document.getElementById('new-pwd').focus();
                 msg.style.color = '#16a34a';
                 msg.textContent = '✓ Admin verified, enter new password';
+                console.log('✓ Admin verified');
             } else {
                 msg.style.color = '#dc2626';
                 msg.textContent = i18n[currentLang].adminError;
                 document.getElementById('admin-pwd').value = '';
+                console.log('✗ Admin password incorrect');
             }
         }
         
@@ -1065,15 +1101,32 @@
                 return;
             }
             
-            // 更新密码（混淆存储）
+            // 关键修复：更新内存中的密码并保存到 localStorage
             accessPassword = newPwd;
+            localStorage.setItem(STORAGE_KEY, newPwd);
+            
+            // 立即更新调试信息
+            updateDebugInfo();
+            
             msg.style.color = '#16a34a';
             msg.textContent = i18n[currentLang].adminSuccess + ': ' + newPwd;
+            
+            console.log('✓ New password saved:', newPwd);
+            console.log('✓ localStorage updated:', localStorage.getItem(STORAGE_KEY));
             
             setTimeout(() => {
                 closeAdmin();
             }, 2000);
         }
+        
+        // 调试快捷键：Ctrl+Shift+D 显示调试面板
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+                const panel = document.getElementById('debug-panel');
+                panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+                updateDebugInfo();
+            }
+        });
         
         // ========== 模态框逻辑（原有） ==========
         function openModal(modalId) {
