@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECRL SDG Sukuk Transaction Structure</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0a0f1a 0%, #111827 50%, #0a0f1a 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            overflow-x: hidden;
+        }
+        
+        .bg-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .orb-1 { top: 5%; left: 5%; width: 400px; height: 400px; background: rgba(16, 185, 129, 0.06); }
+        .orb-2 { top: 40%; right: 5%; width: 350px; height: 350px; background: rgba(245, 158, 11, 0.06); }
+        .orb-3 { bottom: 10%; left: 20%; width: 300px; height: 300px; background: rgba(59, 130, 246, 0.05); }
+        
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #34d399;
+            margin-bottom: 16px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #f8fafc;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+        
+        .header-subtitle {
+            color: #64748b;
+            font-size: 1rem;
+        }
+        
+        .structure-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            position: relative;
+        }
+        
+        .entity-card {
+            background: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(71, 85, 105, 0.4);
+            border-radius: 16px;
+            padding: 24px 32px;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 2;
+        }
+        
+        .entity-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        .entity-card.government {
+            width: 100%;
+            max-width: 600px;
+            border-top: 3px solid #f59e0b;
+            text-align: center;
+        }
+        
+        .entity-card.spv {
+            width: 100%;
+            max-width: 600px;
+            border-top: 3px solid #3b82f6;
+            text-align: center;
+        }
+        
+        .entity-card.project {
+            border-top: 3px solid #ef4444;
+            text-align: center;
+        }
+        
+        .entity-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 16px;
+        }
+        
+        .government .entity-icon { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+        .spv .entity-icon { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+        .investors .entity-icon { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+        .asset .entity-icon { background: rgba(139, 92, 246, 0.15); color: #a78bfa; }
+        .project .entity-icon { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+        
+        .entity-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 4px;
+        }
+        
+        .entity-subtitle {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+        
+        .entity-stats {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fbbf24;
+        }
+        
+        .stat-label {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+        
+        .connector {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 0;
+            position: relative;
+        }
+        
+        .connector-line {
+            width: 2px;
+            height: 40px;
+            background: linear-gradient(180deg, #475569 0%, #60a5fa 50%, #475569 100%);
+        }
+        
+        .connector-label {
+            position: absolute;
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 0.75rem;
+            color: #60a5fa;
+            white-space: nowrap;
+        }
+        
+        .connector-label.guarantee {
+            right: -80px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .split-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            width: 100%;
+            max-width: 800px;
+            position: relative;
+        }
+        
+        .split-connector {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 40px;
+            background: linear-gradient(180deg, #475569 0%, #60a5fa 100%);
+        }
+        
+        .split-connector::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 10px solid #60a5fa;
+        }
+        
+        .branch-line {
+            position: absolute;
+            top: -20px;
+            left: 25%;
+            right: 25%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #60a5fa, transparent);
+        }
+        
+        .branch-line::before,
+        .branch-line::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 2px;
+            height: 20px;
+            background: #60a5fa;
+        }
+        
+        .branch-line::before { left: 0; }
+        .branch-line::after { right: 0; }
+        
+        .side-card {
+            background: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(71, 85, 105, 0.4);
+            border-radius: 16px;
+            padding: 24px;
+            position: relative;
+        }
+        
+        .side-card.investors {
+            border-top: 3px solid #10b981;
+        }
+        
+        .side-card.asset {
+            border-top: 3px solid #8b5cf6;
+        }
+        
+        .side-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        
+        .side-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .side-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+        
+        .side-item i {
+            font-size: 0.9rem;
+        }
+        
+        .investors .side-item i { color: #34d399; }
+        .asset .side-item i { color: #a78bfa; }
+        
+        .flow-connector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 16px 0;
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+        
+        .flow-connector i {
+            color: #60a5fa;
+        }
+        
+        .bottom-section {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
+        }
+        
+        .project-features {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        
+        .feature-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: #f87171;
+        }
+        
+        .sdg-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #34d399;
+            margin-top: 12px;
+        }
+        
+        .awards-section {
+            margin-top: 12px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .award-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 16px;
+            font-size: 0.7rem;
+            color: #fbbf24;
+        }
+        
+        .risk-section {
+            margin-top: 50px;
+        }
+        
+        .risk-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .risk-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 8px;
+        }
+        
+        .risk-header p {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        .risk-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        
+        .risk-card {
+            background: rgba(17, 24, 39, 0.6);
+            border: 1px solid rgba(71, 85, 105, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+        
+        .risk-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .risk-card.political .risk-icon { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+        .risk-card.completion .risk-icon { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+        .risk-card.operation .risk-icon { background: rgba(139, 92, 246, 0.15); color: #a78bfa; }
+        .risk-card.sdg .risk-icon { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+        
+        .risk-content h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #e5e7eb;
+            margin-bottom: 6px;
+        }
+        
+        .risk-content p {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+        
+        .project-info-section {
+            margin-top: 50px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        .info-card {
+            background: rgba(17, 24, 39, 0.6);
+            border: 1px solid rgba(71, 85, 105, 0.3);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+        }
+        
+        .info-card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            margin: 0 auto 16px;
+        }
+        
+        .info-card:nth-child(1) .info-card-icon { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+        .info-card:nth-child(2) .info-card-icon { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+        .info-card:nth-child(3) .info-card-icon { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+        
+        .info-card h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 8px;
+        }
+        
+        .info-card p {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+        
+        .timeline-section {
+            margin-top: 50px;
+            background: rgba(17, 24, 39, 0.6);
+            border: 1px solid rgba(71, 85, 105, 0.3);
+            border-radius: 16px;
+            padding: 24px 32px;
+        }
+        
+        .timeline-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        
+        .timeline-header h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+        
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #34d399, #60a5fa, #a78bfa);
+        }
+        
+        .timeline-item {
+            text-align: center;
+            position: relative;
+            flex: 1;
+        }
+        
+        .timeline-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #34d399;
+            margin: 12px auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .timeline-item:nth-child(2) .timeline-dot { background: #60a5fa; }
+        .timeline-item:nth-child(3) .timeline-dot { background: #a78bfa; }
+        .timeline-item:nth-child(4) .timeline-dot { background: #fbbf24; }
+        
+        .timeline-date {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #e5e7eb;
+        }
+        
+        .timeline-event {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+        
+        @media (max-width: 768px) {
+            .split-section {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .branch-line {
+                display: none;
+            }
+            
+            .risk-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .project-info-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .timeline::before {
+                display: none;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .entity-stats {
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+    
+    <div class="container">
+        <div class="header">
+            <div class="header-badge">
+                <i class="fas fa-leaf"></i>
+                <span>Sustainable Development Goals</span>
+            </div>
+            <h1>ECRL SDG Sukuk Transaction Structure</h1>
+            <p class="header-subtitle">Malaysia's First Government-Guaranteed SDG Islamic Bond | East Coast Rail Link Project Financing Framework</p>
+        </div>
+        
+        <div class="structure-container">
+            <!-- Government -->
+            <div class="entity-card government">
+                <div class="entity-icon">
+                    <i class="fas fa-landmark"></i>
+                </div>
+                <h3 class="entity-title">Government of Malaysia</h3>
+                <p class="entity-subtitle">Sovereign Guarantee</p>
+                <div class="entity-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">RM10.21B</div>
+                        <div class="stat-label">Total Sukuk Program</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">RM7.4B</div>
+                        <div class="stat-label">Funds Raised</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">Feb 2024</div>
+                        <div class="stat-label">First Issuance</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="connector">
+                <div class="connector-line"></div>
+                <span class="connector-label guarantee">Guarantee</span>
+            </div>
+            
+            <!-- SPV -->
+            <div class="entity-card spv">
+                <div class="entity-icon">
+                    <i class="fas fa-building"></i>
+                </div>
+                <h3 class="entity-title">MRL Project Company (Issuer)</h3>
+                <p class="entity-subtitle">Malaysia Rail Link Sdn Bhd | SPV Structure</p>
+                <div class="awards-section">
+                    <span class="award-tag"><i class="fas fa-trophy"></i>Best Islamic Finance Deal SEA 2024</span>
+                    <span class="award-tag"><i class="fas fa-award"></i>Best Green Sukuk 2024</span>
+                </div>
+            </div>
+            
+            <div class="connector">
+                <div class="connector-line"></div>
+            </div>
+            
+            <!-- Split Section -->
+            <div class="split-section">
+                <div class="split-connector"></div>
+                <div class="branch-line"></div>
+                
+                <!-- Investors -->
+                <div class="side-card investors">
+                    <div class="entity-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="side-title">Investors</h3>
+                    <div class="side-items">
+                        <div class="side-item">
+                            <i class="fas fa-mosque"></i>
+                            <span>Middle East Islamic Capital</span>
+                        </div>
+                        <div class="side-item">
+                            <i class="fas fa-flag"></i>
+                            <span>Malaysian Institutions (RHB Bank, etc.)</span>
+                        </div>
+                        <div class="side-item">
+                            <i class="fas fa-globe"></i>
+                            <span>International Investors</span>
+                        </div>
+                    </div>
+                    <div class="flow-connector">
+                        <span>Sukuk Issuance</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+                
+                <!-- Asset -->
+                <div class="side-card asset">
+                    <div class="entity-icon">
+                        <i class="fas fa-train"></i>
+                    </div>
+                    <h3 class="side-title">Underlying Assets</h3>
+                    <div class="side-items">
+                        <div class="side-item">
+                            <i class="fas fa-route"></i>
+                            <span>ECRL Railway Assets (665 km)</span>
+                        </div>
+                        <div class="side-item">
+                            <i class="fas fa-file-contract"></i>
+                            <span>Ijarah (Lease) Structure</span>
+                        </div>
+                        <div class="side-item">
+                            <i class="fas fa-certificate"></i>
+                            <span>SDG Compliance Certification</span>
+                        </div>
+                    </div>
+                    <div class="flow-connector">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Lease/Rental Payments</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="connector">
+                <div class="connector-line"></div>
+            </div>
+            
+            <!-- Project -->
+            <div class="bottom-section">
+                <div class="entity-card project">
+                    <div class="entity-icon">
+                        <i class="fas fa-hammer"></i>
+                    </div>
+                    <h3 class="entity-title">Funds for ECRL Project Construction</h3>
+                    <p class="entity-subtitle">East Coast Rail Link | China-Malaysia Belt and Road Flagship Project</p>
+                    <div class="project-features">
+                        <span class="feature-tag"><i class="fas fa-road"></i>665km Fully Electrified</span>
+                        <span class="feature-tag"><i class="fas fa-mountain"></i>41 Tunnels</span>
+                        <span class="feature-tag"><i class="fas fa-bridge"></i>154km Elevated</span>
+                        <span class="feature-tag"><i class="fas fa-paw"></i>28 Wildlife Crossings</span>
+                    </div>
+                    <div class="sdg-badge">
+                        <i class="fas fa-leaf"></i>
+                        <span>SDG 9: Industry, Innovation & Infrastructure | 1M tonnes CO₂ reduction annually</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Project Info Stats -->
+        <div class="project-info-section">
+            <div class="info-card">
+                <div class="info-card-icon">
+                    <i class="fas fa-percentage"></i>
+                </div>
+                <h3>86.07%</h3>
+                <p>Project Completion<br>As of July 2025</p>
+            </div>
+            <div class="info-card">
+                <div class="info-card-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>21,000+</h3>
+                <p>Jobs Created<br>Involving 2,000+ Local Companies</p>
+            </div>
+            <div class="info-card">
+                <div class="info-card-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>RM184B</h3>
+                <p>Estimated 20-Year GDP Contribution<br>Connecting Four-State Economic Corridor</p>
+            </div>
+        </div>
+        
+        <!-- Timeline -->
+        <div class="timeline-section">
+            <div class="timeline-header">
+                <h3><i class="fas fa-calendar-alt mr-2"></i>Key Project Milestones</h3>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">Feb 2024</div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-event">SDG Sukuk First Issuance<br>RM4.5B Raised</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Dec 2026</div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-event">Phase 1 Completion<br>Kota Bharu-Gombak</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Jan 2027</div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-event">Phase 1 Operations<br>Passenger Service Begins</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Jan 2028</div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-event">Full Line Operations<br>Gombak-Port Klang</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Risk Sharing Section -->
+        <div class="risk-section">
+            <div class="risk-header">
+                <h2><i class="fas fa-shield-alt mr-2"></i>Risk Allocation Mechanism</h2>
+                <p>Risk Allocation Framework</p>
+            </div>
+            
+            <div class="risk-grid">
+                <div class="risk-card political">
+                    <div class="risk-icon">
+                        <i class="fas fa-landmark"></i>
+                    </div>
+                    <div class="risk-content">
+                        <h4>Political Risk</h4>
+                        <p>Covered by government sovereign guarantee, ensuring principal safety for investors. Narrowest spread for government-guaranteed Sukuk in Malaysian history.</p>
+                    </div>
+                </div>
+                
+                <div class="risk-card completion">
+                    <div class="risk-icon">
+                        <i class="fas fa-hard-hat"></i>
+                    </div>
+                    <div class="risk-content">
+                        <h4>Completion Risk</h4>
+                        <p>China Communications Construction Company (CCCC) as contractor, assuming construction period risk through performance bonds. Project progress ahead of schedule at 86.07% completion.</p>
+                    </div>
+                </div>
+                
+                <div class="risk-card operation">
+                    <div class="risk-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <div class="risk-content">
+                        <h4>Operational Risk</h4>
+                        <p>Shared between project company and government through operations agreement. Expected annual ridership of 5.6 million passengers, freight volume of 13.7 million tonnes.</p>
+                    </div>
+                </div>
+                
+                <div class="risk-card sdg">
+                    <div class="risk-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <div class="risk-content">
+                        <h4>SDG Compliance Risk</h4>
+                        <p>Third-party certification body oversight with continuous investor monitoring. Annual CO₂ reduction of 1 million tonnes, aligned with SDG 9 objectives.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
