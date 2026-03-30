@@ -229,32 +229,23 @@
         .gap-card.blue { border-left-color: #2563eb; background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%); }
         .gap-card.purple { border-left-color: #9333ea; background: linear-gradient(135deg, #faf5ff 0%, #ffffff 100%); }
         
-        /* Mobile Responsive - Completely rewritten */
-
+        /* Mobile Responsive */
         @media screen and (max-width: 1024px) {
-            /* Reset all height and overflow constraints */
             html, body {
                 height: auto !important;
                 min-height: 100% !important;
-                max-height: none !important;
                 overflow: visible !important;
                 overflow-x: hidden !important;
-                position: static !important;
             }
 
-            /* Stack panels vertically */
             .three-panel-grid {
                 display: block !important;
-                width: 100% !important;
                 height: auto !important;
                 min-height: auto !important;
-                max-height: none !important;
                 overflow: visible !important;
                 padding: 10px !important;
-                box-sizing: border-box !important;
             }
 
-            /* Each panel is now a block element */
             .panel-card {
                 display: block !important;
                 width: 100% !important;
@@ -262,47 +253,83 @@
                 min-height: auto !important;
                 max-height: none !important;
                 overflow: visible !important;
-                margin-bottom: 15px !important;
-                border-radius: 8px !important;
+                margin-bottom: 20px !important;
             }
 
-            /* Header stays at top of each panel */
-            .panel-header {
-                position: relative !important;
-                height: auto !important;
-            }
-
-            /* Content flows naturally */
             .panel-content {
-                display: block !important;
                 height: auto !important;
-                min-height: auto !important;
                 max-height: none !important;
                 overflow: visible !important;
-                padding: 15px !important;
             }
 
-            /* Ensure text is readable */
-            .bilingual-en {
-                font-size: 14px !important;
-                line-height: 1.5 !important;
-            }
-
-            .bilingual-cn {
-                font-size: 13px !important;
-                line-height: 1.4 !important;
+            .panel-header {
+                position: relative !important;
             }
         }
 
         @media screen and (max-width: 480px) {
             .three-panel-grid {
-                padding: 8px !important;
+                padding: 5px !important;
             }
 
             .panel-card {
-                margin-bottom: 10px !important;
+                margin-bottom: 15px !important;
             }
         }</style>
+
+    <!-- Mobile Detection and Fix Script -->
+    <script>
+        // Detect mobile and apply fixes immediately
+        (function() {
+            var isMobile = window.innerWidth <= 1024 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+            if (isMobile) {
+                // Apply mobile-specific styles dynamically
+                var style = document.createElement('style');
+                style.innerHTML = `
+                    html, body {
+                        height: auto !important;
+                        min-height: 100% !important;
+                        overflow: visible !important;
+                        overflow-x: hidden !important;
+                        position: static !important;
+                    }
+
+                    .three-panel-grid {
+                        display: block !important;
+                        height: auto !important;
+                        overflow: visible !important;
+                        padding: 10px !important;
+                    }
+
+                    .panel-card {
+                        display: block !important;
+                        height: auto !important;
+                        min-height: auto !important;
+                        max-height: none !important;
+                        overflow: visible !important;
+                        margin-bottom: 20px !important;
+                        width: 100% !important;
+                    }
+
+                    .panel-content {
+                        height: auto !important;
+                        max-height: none !important;
+                        overflow: visible !important;
+                    }
+
+                    .panel-header {
+                        position: relative !important;
+                    }
+                `;
+                document.head.appendChild(style);
+
+                // Log for debugging
+                console.log('Mobile mode activated: styles applied');
+            }
+        })();
+    </script>
+
 <base target="_blank">
 </head>
 <body>
